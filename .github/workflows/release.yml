@@ -1,0 +1,42 @@
+name: Push to eltos/typst-packages
+
+on:
+  workflow_run:
+    branches: [main]
+    workflows: [test]
+    types: [completed]
+  
+jobs:
+  push-to-eltos-typst-packages:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: accelerated-jacow
+      - uses: actions/checkout@v4
+        with:
+          repository: eltos/typst-packages
+          ssh-key: ${{ secrets.ELTOS_TYPST_PACKAGES_DEPLOY_KEY }}
+          path: typst-packages
+      - name: Extract version
+        run: |
+          VERSION=$(awk -F'= *' '/^version/{gsub(/"/,"",$2);print $2}' accelerated-jacow/typst.toml)
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+      - name: Copy, commit & push
+        run: |
+          # Copy
+          cd typst-packages
+          git branch -D accelerated-jacow-$VERSION 2>/dev/null || true
+          git checkout -b accelerated-jacow-$VERSION
+          mkdir -p packages/preview/accelerated-jacow/$VERSION
+          rm -drf packages/preview/accelerated-jacow/$VERSION/*
+          cp -r ../accelerated-jacow/* packages/preview/accelerated-jacow/$VERSION/
+          ls -l packages/preview/accelerated-jacow/$VERSION/
+          # Commit
+          git config user.name "Eltos"
+          git config user.email "eltos@outlook.de"
+          git add packages/preview/accelerated-jacow/$VERSION/
+          git commit -m "accelerated-jacow:$VERSION"
+          git config push.autoSetupRemote true
+          git push --force

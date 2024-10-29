@@ -1,0 +1,33 @@
+name: Test
+
+on: [ push, pull_request ]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: yusancky/setup-typst@v3
+      - uses: actions/checkout@v4
+      - name: Extract version
+        run: |
+          VERSION=$(awk -F'= *' '/^version/{gsub(/"/,"",$2);print $2}' typst.toml)
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+      - name: Link local template package
+        run: |
+          mkdir -p ~/.local/share/typst/packages/preview/accelerated-jacow
+          ln -s $(pwd) ~/.local/share/typst/packages/preview/accelerated-jacow/$VERSION
+      - name: Install font
+        run: |
+          sudo apt install tex-gyre
+      - name: Init & compile
+        run: |
+          typst init @preview/accelerated-jacow:$VERSION
+          cd accelerated-jacow
+          ls -l
+          typst compile *.typ
+          ls -l
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PDF
+          path: 'accelerated-jacow/*.pdf'
+          if-no-files-found: error
