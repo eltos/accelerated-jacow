@@ -160,30 +160,35 @@
   set align(left)
   show: columns.with(2, gutter: 0.2in)
 
-  // headings
-  show heading: it => [
-    #if it.level == 1 { // SECTION HEADINGS
-      set align(center)
-      set text(size: 12pt, weight: "bold", style: "normal")
-      block(
-        below: 2pt,
-        allcaps(it.body)
-      )
-      h(1em)
-    } else if it.level == 2 { // Subsection Headings
-      set align(left)
-      set text(size: 12pt, weight: "regular", style: "italic")
-      block(
-        below: 2pt,
-        wordcaps(it.body)
-      )
-      h(1em)
-    } else if it.level == 3 { // Third-Level Headings
-      v(6pt)
-      text(size: 10pt, weight: "bold", style: "normal", wordcaps(it.body))
-      h(0.5em)
-    }
-  ]
+
+  // SECTION HEADINGS
+  show heading.where(level: 1): it => {
+    set align(center)
+    set text(size: 12pt, weight: "bold", style: "normal")
+    block(
+      below: 2pt,
+      allcaps(it.body)
+    )
+    h(1em)
+  }
+
+  // Subsection Headings
+  show heading.where(level: 2): it => {
+    set align(left)
+    set text(size: 12pt, weight: "regular", style: "italic")
+    block(
+      below: 2pt,
+      wordcaps(it.body)
+    )
+    h(1em)
+  }
+
+  // Third-Level Headings
+  show heading.where(level: 3): it => {
+    v(6pt)
+    text(size: 10pt, weight: "bold", style: "normal", wordcaps(it.body))
+    h(0.5em)
+  }
 
   // lists
   show list: set list(indent: 1em)
