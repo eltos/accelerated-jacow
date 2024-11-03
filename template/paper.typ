@@ -6,7 +6,7 @@
  *
  */
 
-#import "@preview/accelerated-jacow:0.1.0": jacow, eqnum
+#import "@preview/accelerated-jacow:0.1.1": jacow, eqnum
 
 #show: paper => jacow(
   // Paper title

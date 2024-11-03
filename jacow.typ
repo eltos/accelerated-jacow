@@ -32,8 +32,8 @@
 
   /// Helper for custom footnote symbols
   let titlenotenumbering(i) = {
-    if i < 6 { ("*", "#", "§", "¶", "‡").at(i - 1) + " " }
-    else { (i - 4)*"*" + " " }
+    if i < 6 { ("*", "#", "§", "¶", "‡").at(i - 1)}
+    else { (i - 4)*"*" }
   }
 
   /// Capitalize all characters in the text, e.g. "THIS IS AN ALLCAPS HEADING"
@@ -71,7 +71,7 @@
 
   // layout
 
-  set page(..{
+  set page(columns: 2, ..{
     if paper-size == "a4" {
       (paper: "a4", margin: (top: 37mm, bottom: 19mm, x: 20mm))
     } else if paper-size == "us-letter" {
@@ -82,6 +82,8 @@
       panic("Unsupported paper-size, use 'a4', 'us-letter' or 'jacow'!")
     }}
   )
+
+  set columns(gutter: 0.2in)
 
   set text(
     font: "TeX Gyre Termes",
@@ -96,59 +98,89 @@
   )
 
 
-  // TODO: footnotes should not span both columns, but be in left column only
+  // Note: footnotes not working in parent scoped placement with two column mode.
+  // See https://github.com/typst/typst/issues/1337#issuecomment-1565376701
+  // As a workaround, we handle footnotes in the title area manually.
+  // An alternative is to not use place and use "show: columns.with(2, gutter: 0.2in)" after the title area instead of "page(columns: 2)",
+  // but then footnotes span the full page and not just the left column.
+  //let titlefootnote(text) = { footnote(numbering: titlenotenumbering, text) }
+  let footnotes = state("titlefootnotes", (:))
+  let titlefootnote(text) = {
+    footnotes.update(footnotes => {
+      footnotes.insert(titlenotenumbering(footnotes.len()+1), text)
+      footnotes
+    })
+    h(0pt, weak: true)
+    context{super(footnotes.get().keys().at(-1))}
+  }
+
   show footnote.entry: set align(left)
   set footnote.entry(
+    indent: 0em,
     separator: [
       #set align(left)
-      #line(length: 20%, stroke: 0.5pt)
+      #line(length: 40%, stroke: 0.5pt)
     ]
   )
 
 
+  place(
+    top + center,
+    scope: "parent",
+    float: true,
+    {
 
-  /*
-   * Title
-   */
 
-  set align(center)
-  text(size: 14pt, weight: "bold", [
-    #allcaps(title)
-    #if funding!=none{
-      footnote(numbering: titlenotenumbering, funding)
+      /*
+       * Title
+       */
+
+      set align(center)
+      text(size: 14pt, weight: "bold", [
+        #allcaps(title)
+        #if funding != none { titlefootnote(funding) }
+      ])
+      v(8pt)
+
+
+      /*
+       * Author list
+       */
+
+      text(size: 12pt, {
+        let also_at = ();
+        for aff in authors.map(a => a.affiliation.at(0)).dedup() {
+          for auth in authors.filter(a => a.affiliation.at(0) == aff) {
+            // author name with superscripts
+            auth.name
+            for aff2 in auth.affiliation.slice(1) {
+              if aff2 not in also_at { also_at += (aff2,) }
+              super(str(also_at.len()))
+            }
+            if "email" in auth { titlefootnote(auth.email) }
+            ", "
+          }
+          // primary affiliations
+          affiliations.at(aff) + "\n"
+        };
+        // secondary affiliations
+        for i in range(also_at.len()) {
+          super(str(i + 1))
+          "also at " + affiliations.at(also_at.at(i)) + "\n"
+        };
+      })
+      v(1pt)
+
+
     }
-  ])
-  v(8pt)
+  )
 
 
-
-  /*
-   * Author list
-   */
-
-  text(size: 12pt, {
-    let also_at = ();
-    for aff in authors.map(a => a.affiliation.at(0)).dedup() {
-      for auth in authors.filter(a => a.affiliation.at(0) == aff) {
-        // author name with superscripts
-        auth.name
-        for aff2 in auth.affiliation.slice(1) {
-          if aff2 not in also_at { also_at += (aff2,) }
-          super(str(also_at.len()))
-        }
-        if "email" in auth {footnote(numbering: titlenotenumbering, auth.email)}
-        ", "
-      }
-      // primary affiliations
-      affiliations.at(aff) + "\n"
-    };
-    // secondary affiliations
-    for i in range(also_at.len()) {
-      super(str(i + 1))
-      "also at " + affiliations.at(also_at.at(i)) + "\n"
-    };
-  })
-  v(8pt)
+  context{
+    for (symbol, text) in footnotes.get() {
+      place(footnote(numbering: it => "", {super(symbol) + " " + text}))
+    }
+  }
 
 
 
@@ -158,7 +190,7 @@
 
   // paragraph
   set align(left)
-  show: columns.with(2, gutter: 0.2in)
+  //show: columns.with(2, gutter: 0.2in)
 
 
   // SECTION HEADINGS
