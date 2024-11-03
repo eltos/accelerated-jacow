@@ -5,8 +5,8 @@
  * See https://jacow.org/ for more information.
  * Requires Typst version 0.12 for compiling
  *
- * This document is licensed under CC BY 4.0.
- * https://creativecommons.org/licenses/by/4.0
+ * This document is licensed under the GNU General Public License 3
+ * https://www.gnu.org/licenses/gpl-3.0.html
  * Copyright (c) 2024 Philipp Niedermayer (github.com/eltos)
  */
 

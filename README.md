@@ -7,16 +7,18 @@ available at https://jacow.org/.
 
 ## Usage
 
-**Web app:**  
+### Typst web app
 In the [typst web app](https://typst.app) select "start from template" and search for the accelerated-jacow template.
 
-**CLI:**  
+### Local installation
 Run these commands inside your terminal:
 ```sh
 typst init @preview/accelerated-jacow
 cd accelerated-jacow
 typst watch paper.typ
 ```
+
+If you don't yet have the *TeX Gyre Termes* font family, you can install it with `sudo apt install tex-gyre`.
 
 ![Thumbnail](thumbnail.webp)
 
