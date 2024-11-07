@@ -163,3 +163,14 @@ Custom upper/lower case can be forced if required.
 
 #bibliography("references.bib")
 
+
+// Workaround until balanced columns are available
+// See https://github.com/typst/typst/issues/466
+#place(
+  bottom,
+  scope: "parent",
+  float: true,
+  clearance: 0pt, // TODO: increase clearance for manual column balancing
+  []
+)
+
