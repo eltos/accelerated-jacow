@@ -6,7 +6,7 @@
  *
  */
 
-#import "@preview/accelerated-jacow:0.1.1": jacow, eqnum
+#import "@preview/accelerated-jacow:0.1.1": jacow
 
 #show: paper => jacow(
   // Paper title
@@ -49,12 +49,12 @@ Typst @typst is a great, modern and blazingly fast typesetting system focussed o
 This paper template is based on the JACoW paper preparation guide @jacowguide.
 It showcases common elements, like an equation:
 $ e^("i" pi) + 1 = 0 $
-This equation has a number for it to be referenced
-#eqnum($
+This equation can be referenced
+$
   sum_(k=0)^n k
   &= 1 + 2 + ... + n \
   &= (n(n+1)) / 2
-$) <eq:thesum>
+$ <eq:thesum>
 
 To reference elements, use @eq:thesum, @fig:writer or @table:xydata.
 Make sure to use the long form at the #underline[beginning] of a sentence.

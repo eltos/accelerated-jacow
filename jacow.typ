@@ -267,10 +267,21 @@
   show link: it => text(font: "DejaVu Sans Mono", size: 7.2pt, it)
 
 
+  // automatically number labeled equation
+  show: body => {
+    for elem in body.children {
+      if elem.func() == math.equation and elem.block and "label" in elem.fields() {
+        set math.equation(numbering: "(1)")
+        elem
+      } else {
+        elem
+      }
+    }
+  }
+
+
   body
 
 
 }
 
-// numbered equations
-#let eqnum(eq) = math.equation(block: true, numbering: "(1)", eq)
