@@ -136,7 +136,7 @@
        */
 
       set align(center)
-      text(size: 14pt, weight: "bold", [
+      text(size: 14pt, weight: "bold", hyphenate: false, [
         #allcaps(title)
         #if funding != none { titlefootnote(funding) }
       ])
@@ -147,12 +147,12 @@
        * Author list
        */
 
-      text(size: 12pt, {
+      text(size: 12pt, hyphenate: false, {
         let also_at = ();
         for aff in authors.map(a => a.affiliation.at(0)).dedup() {
           for auth in authors.filter(a => a.affiliation.at(0) == aff) {
             // author name with superscripts
-            auth.name
+            auth.name.replace(" ", sym.space.nobreak)
             for aff2 in auth.affiliation.slice(1) {
               if aff2 not in also_at { also_at += (aff2,) }
               super(str(also_at.len()))
@@ -161,7 +161,10 @@
             ", "
           }
           // primary affiliations
+          {
+            show regex(" "): sym.space.nobreak
           affiliations.at(aff) + "\n"
+          }
         };
         // secondary affiliations
         for i in range(also_at.len()) {
@@ -196,7 +199,7 @@
   // SECTION HEADINGS
   show heading.where(level: 1): it => {
     set align(center)
-    set text(size: 12pt, weight: "bold", style: "normal")
+    set text(size: 12pt, weight: "bold", style: "normal", hyphenate: false)
     block(
       below: 2pt,
       allcaps(it.body)
@@ -207,7 +210,7 @@
   // Subsection Headings
   show heading.where(level: 2): it => {
     set align(left)
-    set text(size: 12pt, weight: "regular", style: "italic")
+    set text(size: 12pt, weight: "regular", style: "italic", hyphenate: false)
     block(
       below: 2pt,
       wordcaps(it.body)
