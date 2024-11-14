@@ -1,5 +1,9 @@
 # Accelerated JACoW template for typst
 
+[![GitHub Repository](https://img.shields.io/badge/GitHub%20Repo-eltos%2Faccelerated--jacow-lightgray)](https://github.com/eltos/accelerated-jacow)
+[![Typst Universe](https://img.shields.io/badge/Typst%20Universe-accelerated--jacow-%23219dac)](https://typst.app/universe/package/accelerated-jacow)
+
+
 Paper template for conference proceedings in accelerator physics.
 
 Based on the JACoW guide for preparation of papers

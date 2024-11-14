@@ -1,9 +1,12 @@
 /*
- * Example of typst paper to be published with JACoW
+ * Paper template for JACoW conference proceedings
  *
  * Based on the JACoW guide for preparation of papers.
  * See https://jacow.org/ for more information.
  *
+ * This file is part of the accelerated-jacow template.
+ * Typst universe: https://typst.app/universe/package/accelerated-jacow
+ * GitHub repository: https://github.com/eltos/accelerated-jacow
  */
 
 #import "@preview/accelerated-jacow:0.1.1": jacow
