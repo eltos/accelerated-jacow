@@ -19,15 +19,16 @@
   ],
   // Author list
   authors: (
-    (name: "C. Author", affiliation: "uni-a", email: "mail@example.com"),
-    (name: "X. Writer", affiliation: ("company-b", "third")),
-    (name: "P. Other", affiliation: "company-b"),
-    (name: "A. Coauthor", affiliation: ("uni-a", "company-b", "third")),
+    (name: "C. Author", at: "uni", email: "mail@example.com"),
+    (name: "P. Coauthor", at: ("uni", "third")),
+    (name: "J. Cockcroft", at: ("INP", "third")),
+    (name: "C. D. Anderson", at: "INP"),
+    (names: ("N. Bohr", "A. Einstein", "M. Curie", "E. Lawrence"), at: "INP"),
   ),
   affiliations: (
-    uni-a: "Town University, City, Country",
-    company-b: "Paper Company, City, Country",
-    third: "The Third Institute, City, Country",
+    uni: "Town University, City, Country",
+    INP: "Insitute of Nobel Physics, Stockhold, Sweden",
+    third: [The Third Institute, City, Country],
   ),
   // Funding note (optional, comment out if not applicable)
   funding: "Work supported by ...",

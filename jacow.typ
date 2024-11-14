@@ -20,12 +20,21 @@
   body,
 ) = {
 
-  // ensure author affiliation is a list
+  // sanitize author list
   authors = authors.map(a => {
-    if type(a.affiliation) == str {
+    if "by" in a.keys() { a.insert("name", a.remove("by")) }
+    if "at" in a.keys() { a.insert("affiliation", a.remove("at")) }
+    if type(a.affiliation) == str {  // ensure affiliation is an array
       a.insert("affiliation", (a.remove("affiliation"),));
     }; a
   })
+  for a in authors.filter(a => "names" in a.keys()) {
+    for name in a.remove("names") {
+      authors.insert(-1, (name: name, ..a))
+    }
+  }
+  authors = authors.filter(a => "name" in a.keys())
+
   // sort authors: corresponding first, then alphabetic by last name
   authors = authors.sorted(key: a => if "email" in a {" "} + a.name.split(" ").last())
 
@@ -163,7 +172,7 @@
           // primary affiliations
           {
             show regex(" "): sym.space.nobreak
-          affiliations.at(aff) + "\n"
+            affiliations.at(aff) + "\n"
           }
         };
         // secondary affiliations
