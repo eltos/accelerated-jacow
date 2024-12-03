@@ -254,6 +254,18 @@
     kind: table
   ): set figure.caption(position: top)
 
+  // equations
+  set math.equation(numbering: "(1)")
+  show math.equation: it => {
+    if it.has("label") {
+      it
+    } else [
+      // no numbering for equations without label
+      #counter(math.equation).update(v => calc.max(v - 1, 0))
+      #math.equation(it.body, block: it.block, numbering: none)#label("")
+    ]
+  }
+
   // references
   set ref(supplement: it => {
     if it.func() == figure and it.kind == image {
@@ -265,6 +277,11 @@
     }
   })
 
+  // bibliography
+  show bibliography: set text(9pt)
+  set bibliography(title: [References], style: "jacow.csl")
+  show link: it => text(font: "DejaVu Sans Mono", size: 7.2pt, it)
+
 
 
   // abstract
@@ -272,25 +289,6 @@
     == Abstract
     #abstract
   ]
-
-  // references
-  show bibliography: set text(9pt)
-  set bibliography(title: [References], style: "jacow.csl")
-  show link: it => text(font: "DejaVu Sans Mono", size: 7.2pt, it)
-
-
-  // automatically number labeled equation
-  show: body => {
-    for elem in body.children {
-      if elem.func() == math.equation and elem.block and "label" in elem.fields() {
-        set math.equation(numbering: "(1)")
-        elem
-      } else {
-        elem
-      }
-    }
-  }
-
 
   body
 
