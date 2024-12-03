@@ -1,6 +1,6 @@
 [package]
 name = "accelerated-jacow"
-version = "0.1.1"
+version = "0.1.2"
 entrypoint = "jacow.typ"
 description = "Paper template for conference proceedings in accelerator physics"
 authors = ["Philipp Niedermayer <@eltos>"]
