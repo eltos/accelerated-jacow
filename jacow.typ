@@ -257,13 +257,12 @@
   // equations
   set math.equation(numbering: "(1)")
   show math.equation: it => {
-    if it.has("label") {
+    if it.block and not it.has("label") [
+        #counter(math.equation).update(v => v - 1)
+        #math.equation(it.body, block: true, numbering: none)#label("")
+    ] else {
       it
-    } else [
-      // no numbering for equations without label
-      #counter(math.equation).update(v => calc.max(v - 1, 0))
-      #math.equation(it.body, block: it.block, numbering: none)#label("")
-    ]
+    }  
   }
 
   // references
