@@ -12,11 +12,8 @@ available at https://jacow.org/.
 ## Usage
 
 ### Typst web app
-
-[![Create project from this template](https://img.shields.io/badge/-Create%20project%20from%20this%20template-%23219dac)](https://typst.app/app?template=accelerated-jacow&version=latest)
-
-In the [typst web app](https://typst.app) select "start from template" and search for the accelerated-jacow template.
-Alternatively, use the "create project" button above.
+In the [typst web app](https://typst.app/app?template=accelerated-jacow) select "start from template" and search for the accelerated-jacow template.
+Alternatively, use the "create project" button at the top of the package's [typst universe page](https://typst.app/universe/package/accelerated-jacow).
 
 ### Local installation
 Run these commands inside your terminal:
