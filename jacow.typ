@@ -124,6 +124,7 @@
   }
 
   show footnote.entry: set align(left)
+  show footnote.entry: set par(hanging-indent: 0.57em)
   set footnote.entry(
     indent: 0em,
     separator: [
@@ -190,7 +191,7 @@
 
   context{
     for (symbol, text) in footnotes.get() {
-      place(footnote(numbering: it => "", {super(symbol) + " " + text}))
+      place(footnote(numbering: it => "", {super(symbol) + sym.space.med + text}))
     }
   }
 
