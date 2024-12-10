@@ -244,7 +244,7 @@
     layout(size => context {
       align( // center for single-line, left for multi-line captions
         if measure(it).width < size.width { center } else { left },
-        block(width: size.width, it)
+        block(width: size.width, it) // use full width and justify
       )
     })
   }
@@ -289,8 +289,43 @@
     #abstract
   ]
 
+
+  // content
   body
 
 
 }
+
+
+
+/// Table in jacow style
+///
+/// - spec (str): Column alignment specification string such as "ccr"
+/// - header (alignment, none): header location (top and/or bottom) or none
+/// - contents: table contents
+/// -> table
+#let jacow-table(spec, header: top, ..contents) = {
+  spec = spec.codepoints()
+  if header == none { header = alignment.center }
+  let args = (
+    columns: spec.len(),
+    align: spec.map(i => (a: auto, c: center, l: left, r: right).at(i)),
+    stroke: (x, y) => {
+      if y == 0 {(top: 0.08em, bottom: if header.y == top {0.05em})}
+      else if y > 1 {(top: 0em, bottom: 0.08em)}
+    },
+  )
+  for (key, value) in contents.named() {
+    args.insert(key, value)
+  }
+
+  show table.cell.where(y: 0): it => if header.y == top {strong(it)} else {it}
+  show table.cell.where(x: 0): it => if header.x == left {strong(it)} else {it}
+
+  table(
+    ..args,
+    ..contents.pos(),
+  )
+}
+
 

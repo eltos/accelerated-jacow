@@ -9,7 +9,7 @@
  * GitHub repository: https://github.com/eltos/accelerated-jacow
  */
 
-#import "@preview/accelerated-jacow:0.1.2": jacow
+#import "@preview/accelerated-jacow:0.1.2": jacow, jacow-table
 
 #show: paper => jacow(
   // Paper title
@@ -118,32 +118,27 @@ Custom upper/lower case can be forced if required.
 ) <fig:rect>
 
 #figure(
-  table(
-    columns: 4,
-    [x], [1], [2], [3],
-    [y], [0.3], [0.4], [0.8],
+  jacow-table("lcrl",
+    [No.], [$x$ / mm], [$y$], [Note],
+    [1], [0.32], qty(70, "cm"), [Small],
+    [2], [2.5],  qty(3, "dm"),  [Medium],
+    [3], [18],  qty(1.5, "m"), [*Large*],
   ),
   placement: auto, // top, bottom or auto
-  caption: [Values for x and y],
+  caption: [Dimensions],
 ) <table:xydata>
 
 #figure(
-  table(
-    stroke: none,
-    columns: 4,
-    align: (x, y) => {if x==0 {left} else {center}},
-    table.hline(),
-    table.header[][*x*][*y*][*z*],
-    table.hline(),
-    [First], [1], [0.3], [14],
-    [Second], [2], [0.4], table.cell(rowspan: 2, align: horizon, [9¾]),
-    [Third], [3], [0.8],
-    table.hline(),
+  jacow-table("lccc", header: top+left, // top, left or none
+    [], [Gen A], [Gen B], [Gen C],
+    [Frequency], table.cell(qty(1234567.89, "Hz"), colspan: 3, align: center),
+    [Voltage], qty(1, "kV"), qty(3, "kV"), qty(3, "kV"),
+    [Cells], [3], [5], [9],
+    [Quality], [100], [500], num(1000),
   ),
   placement: auto, // top, bottom or auto
   caption: [
-    Values for x and y as in @table:xydata
-    with additional values for z and a different table style
+    Imaginary specifications of the device for the three generations A, B and C
   ]
 )
 
