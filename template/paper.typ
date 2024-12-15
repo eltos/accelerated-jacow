@@ -44,26 +44,36 @@
 //#import "@preview/quick-maths:0.1.0"
 //#import "@preview/physica:0.9.3"
 #import "@preview/unify:0.6.0": unit,num,qty,numrange,qtyrange
+#import "@preview/glossy:0.2.2": init-glossary
+#show: init-glossary.with((
+  JACoW: "Joint Accelerator Conferences Website",
+).pairs().map(((s, l)) => (s, (short: s, long: l))).to-dict())
 
 
 
 = Introduction
 
-Typst @typst is a great, modern and blazingly fast typesetting system focussed on scientific papers.
-This paper template is based on the JACoW paper preparation guide @jacowguide.
+Typst @typst // a citation to the respective entry in "references.bib" (see below)
+is a great, modern and blazingly fast typesetting system focussed on scientific papers.
+This paper template is based on the paper preparation guide of the 
+@JACoW // a glossary entry that will be expanded on first use (see above)
+@jacowguide. // another citation
 It showcases common elements, like an equation:
+
 $ e^("i" pi) + 1 = 0 $
-This equation can be referenced
+
+To be able to reference an equation, add a label like so:
 $
   sum_(k=0)^n k
   &= 1 + 2 + ... + n \
   &= (n(n+1)) / 2
-$ <eq:thesum>
+$ <eq:mycustomlabel>
 
-To reference elements, use @eq:thesum, @fig:writer or @table:xydata.
+To reference elements, use @eq:mycustomlabel, // a reference to a labelled equation
+@fig:writer or @table:xydata.
 Make sure to use the long form at the #underline[beginning] of a sentence.
 @fig:writer[Figure] for example.
-@eq:thesum[Equation] as well.
+@eq:mycustomlabel[Equation] as well.
 @table:xydata is a table and therefore anyways always written out.
 
 Scientific quantities can be typeset correctly with the unify package.
@@ -87,8 +97,9 @@ Here is a list with some markup examples for common document elements:
 
 
 = Headings
-Headings, subsection headings and even third-level headings follow the JACoW style guide and are automatically transformed to all-caps case and word-caps case respectively.
-Custom upper/lower case can be forced if required.
+Headings, subsection headings and even third-level headings follow @JACoW's style guide and are automatically transformed to all-caps case and word-caps case respectively.
+Custom upper/lower case can be forced if required as shown below.
+
 
 #let nacl = [#upper[N]#lower[a]#upper[C]#lower[l]]
 
