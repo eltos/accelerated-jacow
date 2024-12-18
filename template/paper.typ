@@ -11,7 +11,7 @@
 
 #import "@preview/accelerated-jacow:0.1.2": jacow, jacow-table
 
-#show: paper => jacow(
+#show: jacow.with(
   // Paper title
   title: [
     Accelerated JAC#lower[o]W paper template\
@@ -37,7 +37,6 @@
     This document shows how to use the accelerated-jacow paper template to compose papers for JACoW conference proceedings.
     #lorem(20)
   ],
-  paper,
 )
 
 // Other useful packages
@@ -45,6 +44,7 @@
 //#import "@preview/physica:0.9.3"
 #import "@preview/unify:0.6.0": unit,num,qty,numrange,qtyrange
 #import "@preview/glossy:0.2.2": init-glossary
+
 #show: init-glossary.with((
   JACoW: "Joint Accelerator Conferences Website",
 ).pairs().map(((s, l)) => (s, (short: s, long: l))).to-dict())
