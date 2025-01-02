@@ -57,7 +57,7 @@ Typst @typst // a citation to the respective entry in "references.bib" (see belo
 is a great, modern and blazingly fast typesetting system focussed on scientific papers.
 This paper template is based on the paper preparation guide of the 
 @JACoW // a glossary entry that will be expanded on first use (see above)
-@jacowguide. // another citation
+@jacowguide @jacow.org. // two more citations
 It showcases common elements, like an equation:
 
 $ e^("i" pi) + 1 = 0 $
