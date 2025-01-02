@@ -25,13 +25,14 @@ jobs:
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
       - name: Copy, commit & push
         run: |
-          # Copy
           cd typst-packages
           git branch -D accelerated-jacow-$VERSION 2>/dev/null || true
           git checkout -b accelerated-jacow-$VERSION
           mkdir -p packages/preview/accelerated-jacow/$VERSION
           rm -drf packages/preview/accelerated-jacow/$VERSION/*
+          # Copy
           cp -r ../accelerated-jacow/* packages/preview/accelerated-jacow/$VERSION/
+          rm -drf packages/preview/accelerated-jacow/$VERSION/tests
           ls -l packages/preview/accelerated-jacow/$VERSION/
           # Commit
           git config user.name "Eltos"
