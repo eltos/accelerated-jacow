@@ -39,15 +39,18 @@
   ],
 )
 
+
 // Other useful packages
 //#import "@preview/quick-maths:0.1.0"
 //#import "@preview/physica:0.9.3"
 #import "@preview/unify:0.6.0": unit,num,qty,numrange,qtyrange
-#import "@preview/glossy:0.2.2": init-glossary
+#import "@preview/glossy:0.4.0": init-glossary
 
+// Abbreviations
 #show: init-glossary.with((
   JACoW: "Joint Accelerator Conferences Website",
-).pairs().map(((s, l)) => (s, (short: s, long: l))).to-dict())
+))
+
 
 
 
@@ -56,7 +59,7 @@
 Typst @typst // a citation to the respective entry in "references.bib" (see below)
 is a great, modern and blazingly fast typesetting system focussed on scientific papers.
 This paper template is based on the paper preparation guide of the 
-@JACoW // a glossary entry that will be expanded on first use (see above)
+@JACoW // an abbreviation that will be expanded on first use (see above)
 @jacowguide @jacow.org. // two more citations
 It showcases common elements, like an equation:
 
