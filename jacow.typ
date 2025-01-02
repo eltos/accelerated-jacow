@@ -281,7 +281,8 @@
   set bibliography(title: [References], style: "jacow.csl")
   show bibliography: it => {
     set text(9pt)
-    show link: it => text(font: "DejaVu Sans Mono", size: 7.2pt, it)    
+    set par(spacing: 9pt)
+    show link: it => text(font: "DejaVu Sans Mono", size: 7.2pt, it)
     it
   }
 
