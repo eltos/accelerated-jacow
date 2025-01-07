@@ -17,6 +17,7 @@
   affiliations: (),
   abstract: none,
   funding: none,
+  show-grid: false,
   body,
 ) = {
 
@@ -80,16 +81,35 @@
 
   // layout
 
-  set page(columns: 2, ..{
-    if paper-size == "a4" {
+  set page(columns: 2,
+    ..if paper-size == "a4" {
       (paper: "a4", margin: (top: 37mm, bottom: 19mm, x: 20mm))
-    } else if paper-size == "us-letter" {
+    } else if paper-size in ("letter", "us-letter") {
       (paper: "us-letter", margin: (y: 0.75in, left: 0.79in, right: 1.02in))
     } else if paper-size == "jacow" { // jacow size is intersection of both
-      (width: 209.9mm, height: 279.4mm, margin: (x: 20mm, y: 0.75in))
+      (width: 21cm, height: 11in, margin: (x: 20mm, y: 0.75in))
     } else {
       panic("Unsupported paper-size, use 'a4', 'us-letter' or 'jacow'!")
-    }}
+    },
+    ..if show-grid {
+      (background: [
+        #let at = (x: 0pt, y: 0pt, c) => place(bottom + left, move(dx: x, dy: -y, c))
+        // grid
+        #for i in range(-1, 28){
+          let style = (length: 100%, stroke: silver)
+          at(x: 20mm + i*1cm, line(angle: 90deg, ..style))
+          at(y: 0.75in + i*0.5in, line(..style))
+          set text(fill: gray.darken(50%))
+          at(x: 20mm + i*1cm, y: 0.25in, if i == 1 [1 cm] else if i >= 0 [#i])
+          at(x: 1cm, y: 0.75in + i*0.5in, if i == 1 [½ in] else if i >= 0 {str(i/2).replace(".5", "½")})
+        }
+        // page and column borders
+        #at(rect(width: 21cm, height: 29.7cm)) // DIN A4
+        #at(rect(width: 8.5in, height: 11in)) // US letter
+        #at(x: 2cm, y: 0.75in, rect(width: 82.5mm, height: 9.5in, stroke: green))
+        #at(x: 19cm, y: 0.75in, rect(width: -82.5mm, height: 9.5in, stroke: green))
+      ])
+    }
   )
 
   set columns(gutter: 0.2in)
@@ -132,6 +152,7 @@
       #line(length: 40%, stroke: 0.5pt)
     ]
   )
+
 
 
   place(
