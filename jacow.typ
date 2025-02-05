@@ -52,6 +52,7 @@
   let allcaps = upper
 
   /// Capitalize major words, e.g. "This is a Word-Caps Heading"
+  /// Heuristic until we have https://github.com/typst/typst/issues/1707
   let wordcaps(body) = {
     if body.has("text") {
       let txt = lower(body.text)
@@ -200,11 +201,11 @@
             // author name with superscripts
             keep-together({
               auth.name
-            for aff2 in auth.affiliation.slice(1) {
-              if aff2 not in also_at { also_at += (aff2,) }
-              super(str(also_at.len()))
-            }
-            if "email" in auth { titlefootnote(auth.email) }
+              for aff2 in auth.affiliation.slice(1) {
+                if aff2 not in also_at { also_at += (aff2,) }
+                super(str(also_at.len()))
+              }
+              if "email" in auth { titlefootnote(auth.email) }
               ","
             })
             " "
@@ -337,8 +338,6 @@
     show link: it => text(font: "DejaVu Sans Mono", size: 7.2pt, it)
     it
   }
-
-
 
 
   // abstract
