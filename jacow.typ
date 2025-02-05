@@ -90,6 +90,8 @@
       (paper: "us-letter", margin: (y: 0.75in, left: 0.79in, right: 1.02in))
     } else if paper-size == "jacow" { // jacow size is intersection of both
       (width: 21cm, height: 11in, margin: (x: 20mm, y: 0.75in))
+    } else if paper-size == "test" {
+      (width: 21cm, height: auto, margin: (x: 20mm, y: 0.75in))
     } else {
       panic("Unsupported paper-size, use 'a4', 'us-letter' or 'jacow'!")
     },
