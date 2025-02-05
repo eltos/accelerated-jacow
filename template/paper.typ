@@ -24,6 +24,7 @@
     (name: "J. Cockcroft", at: ("INP", "third")),
     (name: "C. D. Anderson", at: "INP"),
     (names: ("N. Bohr", "A. Einstein", "M. Curie", "E. Lawrence"), at: "INP"),
+    //(names: ("A. Group", "O. F. People"), at: "Single Use Primary Affiliation, Shortcut Way"),
   ),
   affiliations: (
     uni: "Town University, City, Country",
@@ -37,6 +38,7 @@
     This document shows how to use the accelerated-jacow paper template to compose papers for JACoW conference proceedings.
     #lorem(20)
   ],
+  //show-grid: true
 )
 
 

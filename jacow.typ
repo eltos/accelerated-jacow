@@ -22,18 +22,20 @@
 ) = {
 
   // sanitize author list
-  authors = authors.map(a => {
-    if "by" in a.keys() { a.insert("name", a.remove("by")) }
-    if "at" in a.keys() { a.insert("affiliation", a.remove("at")) }
-    if type(a.affiliation) == str {  // ensure affiliation is an array
-      a.insert("affiliation", (a.remove("affiliation"),));
-    }; a
-  })
   for a in authors.filter(a => "names" in a.keys()) {
     for name in a.remove("names") {
       authors.insert(-1, (name: name, ..a))
     }
   }
+  authors = authors.map(a => {
+    if "by" in a.keys() { a.insert("name", a.remove("by")) }
+    if "at" in a.keys() { a.insert("affiliation", a.remove("at")) }
+    if type(a.affiliation) == str {  // ensure affiliation is an array
+      a.insert("affiliation", (a.remove("affiliation"),));
+    }
+    if "name" in a.keys() {a.insert("name", a.name.trim(" "))}
+    a
+  })
   authors = authors.filter(a => "name" in a.keys())
 
   // sort authors: corresponding first, then alphabetic by last name
@@ -120,8 +122,6 @@
   )
 
   set par(
-    first-line-indent: 1em,
-    justify: true,
     spacing: 0.65em,
     leading: 0.5em,
   )
@@ -161,13 +161,15 @@
     float: true,
     {
 
+      set align(center)
+      set par(justify: false)
+      set text(hyphenate: false)
 
       /*
        * Title
        */
 
-      set align(center)
-      text(size: 14pt, weight: "bold", hyphenate: false, [
+      text(size: 14pt, weight: "bold", [
         #allcaps(title)
         #if funding != none { titlefootnote(funding) }
       ])
@@ -178,29 +180,52 @@
        * Author list
        */
 
-      text(size: 12pt, hyphenate: false, {
+      let keep-together(content) = {
+        if type(content) == str and "\n" in content { // allow manual linebreaks
+          show " ": sym.space.nobreak
+          show "-": sym.hyph.nobreak
+          content
+        } else {
+          set box(fill: green.lighten(50%), stroke: green.lighten(50%)) if show-grid
+          box(content)
+        }
+      }
+
+      text(size: 12pt, {
         let also_at = ();
         for aff in authors.map(a => a.affiliation.at(0)).dedup() {
           for auth in authors.filter(a => a.affiliation.at(0) == aff) {
             // author name with superscripts
-            auth.name.replace(" ", sym.space.nobreak)
+            keep-together({
+              auth.name
             for aff2 in auth.affiliation.slice(1) {
               if aff2 not in also_at { also_at += (aff2,) }
               super(str(also_at.len()))
             }
             if "email" in auth { titlefootnote(auth.email) }
-            ", "
+              ","
+            })
+            " "
           }
           // primary affiliations
-          {
-            show regex(" "): sym.space.nobreak
-            affiliations.at(aff) + "\n"
+          let a = affiliations.at(
+            // allow passing prim. aff. directly, but only if it's a proper one
+            aff, ..if "," in aff {(default: aff)}
+          )
+          if type(a) == str {
+            // trim whitespaces, but allow newlines at start for manual linebreak
+            a = a.trim(" ").trim(at: end)
           }
+          keep-together(a) + "\n"
         };
         // secondary affiliations
         for i in range(also_at.len()) {
-          super(str(i + 1))
-          "also at " + affiliations.at(also_at.at(i)) + "\n"
+          let a = affiliations.at(also_at.at(i)) // sec. aff. only via key
+          if type(a) == str { a = a.trim() }
+          keep-together(
+            super(str(i + 1)) + "also at " + a
+          )
+          "\n"
         };
       })
       v(1pt)
@@ -224,6 +249,10 @@
 
   // paragraph
   set align(left)
+  set par(
+    first-line-indent: 1em,
+    justify: true,
+  )
   //show: columns.with(2, gutter: 0.2in)
 
 
