@@ -29,7 +29,11 @@ If you don't yet have the *TeX Gyre Termes* font family, you can install it with
 
 ### API documentation
 
-The template exposes the `jacow` function which can be used with a show rule:
+```typ
+ #import "@preview/accelerated-jacow:0.1.3": jacow, jacow-table
+```
+
+To apply the template, use the `jacow` function with a show rule:
 ```typ
 #show: jacow.with(
   title: [ Paper title ],
@@ -57,6 +61,22 @@ It expects the following parameters:
 - `paper-size`: (str, optional): The paper size. One of "a4", "letter" or "jacow" (default), the latter being the intersection of the two former ones.
 
 In accordance with the JACoW style guide, the author list is automatically grouped by affiliation and sorted alphabetically, with the corresponding author preceding other authors.
+
+
+The `jacow-table` function is a smart wrapper around typst's table that applies the typical jacow style (boldface header and horizontal lines):
+```typ
+#figure(
+  jacow-table("<colspec>", header: top, // top, left, top+left or none
+    [Table], [Content], [...],
+  ),
+  placement: auto, // top, bottom or auto
+  caption: [...]
+)
+```
+where
+- `<colspec>` (str) is the column specification, a string where each character represents a column (`a` for auto aligned, `c` for center aligned, `l` for left aligned, `r` for right aligned)
+- `header` (alignment, optional) is the header position (top and/or left)
+- other arguments and cell contents are passed to the [table](https://typst.app/docs/reference/model/table) function 
 
 See [template/paper.typ](template/paper.typ) for a usage example.
 
