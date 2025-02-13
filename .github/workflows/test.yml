@@ -4,6 +4,7 @@ on: [ push, pull_request ]
 
 jobs:
   compile:
+    name: Compile template with typst ${{ matrix.typst-version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
