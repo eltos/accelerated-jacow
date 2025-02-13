@@ -45,8 +45,8 @@
 // Other useful packages
 //#import "@preview/quick-maths:0.1.0"
 //#import "@preview/physica:0.9.3"
-#import "@preview/unify:0.6.0": unit,num,qty,numrange,qtyrange
-#import "@preview/glossy:0.4.0": init-glossary
+#import "@preview/unify:0.7.0": unit,num,qty,numrange,qtyrange
+#import "@preview/glossy:0.7.0": init-glossary
 
 // Abbreviations
 #show: init-glossary.with((
