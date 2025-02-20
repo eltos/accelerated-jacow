@@ -41,7 +41,6 @@ To apply the template, use the `jacow` function with a show rule:
   affiliations: (:),
   funding: "Work supported by ...",
   abstract: [ #lorem(20) ],
-  //show-grid: true
 )
 ```
 It expects the following parameters:
@@ -55,8 +54,9 @@ It expects the following parameters:
   - `email` (str, optional): The email address for the corresponding author(s)
 - `affiliations` (dict): Dictionary mapping affiliation keys as used with `at` in the author list to their full form (str or content, e.g. "Affiliation, City, Country").
   It is possible to insert newline characters to manually adjust the layout if required.
-- `funding` (str, optional): The funding note
 - `abstract` (content): The abstract
+- `pubmatter` (dict, optional): Pubmatter object with `title`, `author`, `affiliations` and/or `abstract` if not passed explicitly, e.g. `pubmatter.load(yaml("frontmatter.yml"))`
+- `funding` (str, optional): The funding note
 - `show-grid` (bool, optional): Switch to enable a measurement grid for debugging purposes
 - `paper-size`: (str, optional): The paper size. One of "a4", "letter" or "jacow" (default), the latter being the intersection of the two former ones.
 

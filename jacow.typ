@@ -11,15 +11,39 @@
  */
 
 #let jacow(
-  paper-size: "jacow",
-  title: "Title goes here",
+  title: none,
   authors: (),
-  affiliations: (),
+  affiliations: (:),
   abstract: none,
+  pubmatter: none,
   funding: none,
+  paper-size: "jacow",
+  abstract-title: "Abstract",
+  bibliography-title: "References",
   show-grid: false,
   body,
 ) = {
+
+  // Pubmatter support
+  if pubmatter != none {
+    if title == none {
+      title = pubmatter.title
+    }
+    if authors.len() == 0 {
+      authors = pubmatter.authors.map(a => {
+        a.insert("at", a.affiliations.map(a => a.id))
+        a
+      })
+    }
+    if affiliations.len() == 0 {
+      affiliations = pubmatter.affiliations.map(a => (a.id, a.name)).to-dict()
+    }
+    if abstract == none {
+      abstract-title = pubmatter.abstracts.at(0).title
+      abstract = pubmatter.abstracts.at(0).content
+    }
+  }
+
 
   // sanitize author list
   for a in authors.filter(a => "names" in a.keys()) {
@@ -137,6 +161,7 @@
   // but then footnotes span the full page and not just the left column.
   //let titlefootnote(text) = { footnote(numbering: titlenotenumbering, text) }
   let footnotes = state("titlefootnotes", (:))
+  footnotes.update(footnotes => (:)) // For multiple papers in a single file
   let titlefootnote(text) = {
     footnotes.update(footnotes => {
       footnotes.insert(titlenotenumbering(footnotes.len()+1), text)
@@ -331,7 +356,7 @@
   })
 
   // bibliography
-  set bibliography(title: [References], style: "jacow.csl")
+  set bibliography(title: bibliography-title, style: "jacow.csl")
   show bibliography: it => {
     set text(9pt)
     set par(spacing: 9pt)
@@ -342,7 +367,7 @@
 
   // abstract
   if abstract != none [
-    == Abstract
+    == #abstract-title
     #abstract
   ]
 

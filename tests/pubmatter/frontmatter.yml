@@ -1,0 +1,47 @@
+# Frontmatter
+# Specification see https://typst.app/universe/package/pubmatter/
+
+title: Accelerated JACoW paper template for conference proceedings
+
+authors:
+  - name: C. Author
+    email: mail@example.com
+    affiliations: uni
+  - name: P. Coauthor
+    affiliations:
+      - uni
+      - third
+  - name: J. Cockcroft
+    affiliations:
+      - INP
+      - third
+  - name: C. D. Anderson
+    affiliations: INP
+  - name: N. Bohr
+    affiliations: INP
+  - name: A. Einstein
+    affiliations: INP
+  - name: M. Curie
+    affiliations: INP
+  - name: E. Lawrence
+    affiliations: INP
+
+affiliations:
+  - id: uni
+    name: Town University, City, Country
+  - id: INP
+    name: Insitute of Nobel Physics, Stockhold, Sweden
+  - id: third
+    name: The Third Institute, City, Country
+
+abstract: >
+  This document shows how to use the accelerated-jacow
+  paper template to compose papers for JACoW conference
+  proceedings. Lorem ipsum dolor sit amet, consectetur adip-
+  iscing elit, sed do eiusmod tempor incididunt ut labore et
+  dolore magnam aliquam quaerat.
+
+#license: CC-BY-4.0
+#doi: 10.1000/182
+#date: 2000-01-01
+#citation: ...
