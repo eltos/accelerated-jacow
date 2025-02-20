@@ -16,6 +16,7 @@
   title: [
     Reference style guide for JAC#lower[o]W papers
   ],
+  show-grid: true
 )
 
 == Referencing #box[JACoW] Proceedings

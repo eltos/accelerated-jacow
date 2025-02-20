@@ -50,7 +50,7 @@
 #show: jacow.with(
   paper-size: "test",
   title: [
-    very long title comprising may words and even more characters and spanning over two full lines
+    very long title comprising many words and even more characters and spanning over two full lines
   ],
   authors: (
     
