@@ -4,9 +4,16 @@ on: [ push, pull_request ]
 
 jobs:
   compile:
+    name: Compile template with typst ${{ matrix.typst-version }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        typst-version: [ '0.13' ]
     steps:
       - uses: typst-community/setup-typst@v4
+        with:
+          typst-version: ${{ matrix.typst-version }}
+          allow-prereleases: true
       - uses: actions/checkout@v4
       - name: Extract version
         run: |
