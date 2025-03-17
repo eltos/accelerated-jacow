@@ -329,7 +329,12 @@
     layout(size => context {
       align( // center for single-line, left for multi-line captions
         if measure(it).width < size.width { center } else { left },
-        block(width: size.width, it) // use full width and justify
+        if sys.version.at(1) >= 13 {
+          // workaround for https://github.com/typst/typst/issues/5472#issuecomment-2730205275
+          block(width: size.width, context[#it.supplement #it.counter.display()#it.separator#it.body])
+        } else {
+          block(width: size.width, it) // use full width and justify
+        }
       )
     })
   }
