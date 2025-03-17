@@ -35,24 +35,17 @@
   funding: "Work supported by ...",
   // Paper abstract
   abstract: [
-    This document shows how to use the accelerated-jacow paper template to compose papers for JACoW conference proceedings.
-    #lorem(20)
+    This document demonstrates the usage of the accelerated-jacow paper template to compose papers for JACoW conference proceedings.
   ],
   //show-grid: true
 )
 
 
-// Other useful packages
-//#import "@preview/quick-maths:0.1.0"
-//#import "@preview/physica:0.9.3"
-#import "@preview/unify:0.7.0": unit,num,qty,numrange,qtyrange
+// Other useful packages, see below for usage examples
+#import "@preview/unify:0.7.1": unit, num, qty, numrange, qtyrange
 #import "@preview/glossy:0.7.0": init-glossary
-
-// Abbreviations
-#show: init-glossary.with((
-  JACoW: "Joint Accelerator Conferences Website",
-))
-
+#import "@preview/lilaq:0.1.0" as lq
+#import "@preview/physica:0.9.5": *
 
 
 
@@ -60,61 +53,49 @@
 
 Typst @typst // a citation to the respective entry in "references.bib" (see below)
 is a great, modern and blazingly fast typesetting system focussed on scientific papers.
-This paper template is based on the paper preparation guide of the 
-@JACoW // an abbreviation that will be expanded on first use (see above)
-@jacowguide @jacow.org. // two more citations
-It showcases common elements, like an equation:
+It is markup based, supporting *strong* _emphasis_ of text, #underline[underlining], `monospace` font, smart "quotes" and much more.
+Equations can be typeset inline like $beta_"x" (s)$, and in display mode:
 
-$ e^("i" pi) + 1 = 0 $
-
-To be able to reference an equation, add a label like so:
 $
-  sum_(k=0)^n k
-  &= 1 + 2 + ... + n \
-  &= (n(n+1)) / 2
+  curl E &= - pdv(B, t) \
+  integral.cont_(partial A) E dd(s) &= - integral.double_A pdv(B, t) dd(A)
+$
+
+By adding a label
+
+$
+  e^("i" pi) + 1 = 0 
 $ <eq:mycustomlabel>
 
-To reference elements, use @eq:mycustomlabel, // a reference to a labelled equation
-@fig:writer or @table:xydata.
-Make sure to use the long form at the #underline[beginning] of a sentence.
-@fig:writer[Figure] for example.
-@eq:mycustomlabel[Equation] as well.
-@table:xydata is a table and therefore anyways always written out.
-
-Scientific quantities can be typeset correctly with the unify package.
-Examples are quantities like
-#qty(1.2, "um") with a reduced spacing,
-$q=#num(0.12345678)$ with digit grouping,
-$f_"rev"=qty("325.2+-0.1", "kHz")$ with an uncertainty
-or $h=qty("8.3+0.1-0.2  e-2", "mm")$ with an asymmetric tolerance.
-Plain units can be written as
-#unit("tesla meter") or #unit("T m") (but #unit("Tm") is something different).
-More examples: #qty(3, "keV"), #qty(4, "GeV"), $qty("100", "kW")$, #qty(7, "um")
-
-Here is a list with some markup examples for common document elements:
-- This is a "list"
-- With _emphasize_ and *strong _emphasize_*
-- And usage of a `monospace font`
-- Last #highlight[but not least] something
-  #highlight(fill: white, stroke: orange, extent: 0.1em, [fancy])
-  💥
+we can reference @eq:mycustomlabel. // a reference to a labelled equation
+The same works for @fig:writer and @table:xydata too.
+Remember to use the long form at the beginning of a sentence:
+@fig:writer[Figure].
+@eq:mycustomlabel[Equation].
+Done.
 
 
+= Template features
 
-= Headings
-Headings, subsection headings and even third-level headings follow @JACoW's style guide and are automatically transformed to all-caps case and word-caps case respectively.
-Custom upper/lower case can be forced if required as shown below.
+The accelerated-jacow template is based on the JACoW paper preparation guide @jacowguide @jacow.org. // citations
+It takes care of proper page size, margins and spacing, generates the front matter with properly formatted title, author list, footnotes and abstract using the show-rule at the top of this document and formats headings, tables, references and more.
 
+Headings are automatically transformed to all-caps and word-caps case as specified by the paper preparation guide.
+Should you require custom control on upper/lower case, this can be forced not only in the title (see above), but also in headings like so:
 
 #let nacl = [#upper[N]#lower[a]#upper[C]#lower[l]]
 
-== Subsection heading: #nacl, #upper[N]#lower[a]Cl, $"NaCl"$
-#lorem(30)
 
-=== Third-level headings
-#lorem(30)
+== Subsection heading: #nacl, #upper[N]#lower[a]Cl, $"NaCl"$, $isotope("He", a:4, z:2)$
 
-= Floating figures
+=== A third level heading
+// <-- no blank line here!
+Third-level headings are also supported, but mind that you must not leave a blank line after a third-level heading to get the desired run-in heading!
+
+
+== Figures and tables
+
+Floating figures can be added and their placement can be controlled easily like shown here with @fig:writer.
 
 #figure(
   image("writer.svg"),
@@ -122,16 +103,9 @@ Custom upper/lower case can be forced if required as shown below.
   caption: [Scientific writing (AI artwork).],
 ) <fig:writer>
 
-#lorem(50)
-
-#figure(
-  box(fill: silver, width: 100%, height: 1cm),
-  placement: bottom, // top, bottom or auto
-  caption: [
-    A gray rectangle with a relative width of 100%, an absolute height of 1cm
-    and a two line caption.
-  ],
-) <fig:rect>
+For JACoW style tables, the `jacow-table` function is provided.
+It takes the column alignment as first argument (here `lcrl` means left, center, right, left), followed by the table contents. With `placement: none`, @table:xydata is forced to appear exactly "here".
+The optional `header` argument allows to adjust the appearance of the JACoW table style as shown in @table:specs.
 
 #figure(
   jacow-table("lcrl",
@@ -140,9 +114,10 @@ Custom upper/lower case can be forced if required as shown below.
     [2], [2.5],  qty(3, "dm"),  [Medium],
     [3], [18],  qty(1.5, "m"), [*Large*],
   ),
-  placement: auto, // top, bottom or auto
+  placement: none, // top, bottom, auto or none
   caption: [Dimensions],
 ) <table:xydata>
+
 
 #figure(
   jacow-table("lccc", header: top+left, // top, left or none
@@ -152,28 +127,110 @@ Custom upper/lower case can be forced if required as shown below.
     [Cells], [3], [5], [9],
     [Quality], [100], [500], num(1000),
   ),
-  placement: auto, // top, bottom or auto
+  placement: none, // top, bottom, auto or none
   caption: [
-    Imaginary specifications of the device for the three generations A, B and C
+    Imaginary specifications of a device for the three generations A, B and C
   ]
-)
+) <table:specs>
 
-#lorem(50)
+
+
+Finally, it is easy to create column spanning figures as shown in @fig:rect.
+These support top, bottom or automatic placement as well.
 
 #figure(
-  box(fill: silver, width: 100%, height: 3cm),
+  box(fill: silver, width: 100%, height: 2cm),
   scope: "parent", // two column-figure
   placement: top, // top, bottom or auto
-  caption: [A column spanning figure.],
+  caption: [A column spanning figure. #lorem(21)],
 ) <fig:rect>
 
-#lorem(300)
+
+
+
+
+
+= Packages
+
+The Typst ecosystem features a broad range of community driven packages to make writing papers with Typst even more convenient.
+These can be found by exploring the Typst Universe at https://typst.app/universe.
+
+// See the import section near the top of this document
+
+
+== Physical quantities
+
+The *unify* package helps typesetting numbers and scientific quantities.
+Examples include quantities like
+#qty(1.2, "um") with reduced spacing between the number and unit
+and features like digit grouping in $q=#num(0.12345678)$.
+Uncertain quantities like $f_"rev"=qty("325.2+-0.1", "kHz")$
+as well as tolerances such as $h=qty("8.3+0.1-0.2  e-2", "mm")$ are supported.
+
+Plain units can be written as
+#unit("tesla meter") or #unit("T m") (not Tm or T m which are something different).
+More examples: #qty(3, "keV"), #qty(4, "GeV"), $qty("100", "kW")$, #qty(7, "um").
+//
+For details refer to the package documentation at https://typst.app/universe/package/unify.
+
+
+
+
+== Plots
+
+With the *lilaq* package, plots can be create directly in the document, so you can skip the additional plotting step in your workflow while ensuring that all plot elements are properly sized.
+@fig:lilaq[Figure] gives an example and the full documentation is available at https://lilaq.org.
+
+// general plot styling options
+#show lq.selector(lq.diagram): set text(.9em)
+#show: lq.set-tick(outset: 3pt, inset: 0pt)
+#show: lq.set-diagram(xaxis: (mirror: (ticks: false)), yaxis: (mirror: (ticks: false)))
+
+#figure(
+  lq.diagram(
+    // sine
+    let x = lq.linspace(0, 10),
+    let y = x.map(x => calc.cos(x)),
+    lq.plot(x, y, mark: none, label: [$cos(x)$]),
+    // data
+    lq.plot((1, 2, 3, 7, 9), (-1, 1.8, 0.7, -0.3, 1), yerr: 0.3, mark: "o", stroke: (dash: "dashed"), label: [Data]),
+    // plot layout
+    xlabel: [Angle ~ $x$ / rad], xlim: (0, 10),
+    ylabel: [$y$ / m], ylim: (-1.5, 2.5),
+  ),
+  placement: auto,
+  caption: [A plot create with the Lilaq package directly inside the typst source code]
+) <fig:lilaq>
+
+
+
+
+== Abbreviations
+
+// Abbreviation definitions
+#show: init-glossary.with((
+  JACoW: "Joint Accelerator Conferences Website",
+  RF: "radio frequency",
+))
+
+The *glossy* package helps managing abbreviations,
+automatically using the long form on first use of @JACoW
+and the short form on subsequent uses of @JACoW.
+But it can do much more:
+@RF:a:cap device shows how capitalization is applied on sentence start, and in addition the article (a/an) is managed automatically, since it differs between the first and subsequent use of @RF:a device.
+In addition, explicit forms are supported as in @RF:long, @RF:short and @RF:both,
+and plural forms can be accessed like in @RF:pl.
+For more details, refer to https://typst.app/universe/package/glossy.
+
+
+
 
 = Conclusions
-#lorem(50)
+#lorem(42)
 
 = Acknowledgements
-#lorem(50)
+#lorem(42)
+
 
 
 #bibliography("references.bib")
@@ -185,7 +242,7 @@ Custom upper/lower case can be forced if required as shown below.
   bottom,
   scope: "parent",
   float: true,
-  clearance: 0pt, // TODO: increase clearance for manual column balancing
+  clearance: 108pt, // TODO: increase clearance for manual column balancing
   []
 )
 
