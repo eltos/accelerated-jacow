@@ -318,6 +318,12 @@
 
   // figures
   show figure: set figure(placement: auto)
+  show figure.where(placement: none): it => {
+    // add a little spacing for inline figures and tables
+    v(0.5em)
+    it
+    v(0.5em)
+  }
   show figure.caption: it => {
     set par(first-line-indent: 0em)
     layout(size => context {
