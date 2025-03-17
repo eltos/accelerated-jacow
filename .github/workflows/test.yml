@@ -14,6 +14,9 @@ jobs:
         with:
           typst-version: ${{ matrix.typst-version }}
           allow-prereleases: true
+      - name: Install webp
+        run: |
+          which cwebp || sudo apt install webp
       - uses: actions/checkout@v4
       - name: Extract version
         run: |
@@ -34,8 +37,15 @@ jobs:
           grep "#import \"@preview/accelerated-jacow:$VERSION\"" *.typ
           typst compile *.typ
           ls -l
+      - name: Create thumbnail
+        run: |
+          cd accelerated-jacow
+          typst compile --pages 1 --ppi 250 *.typ thumbnail.png
+          cwebp -lossless thumbnail.png -o thumbnail.webp
       - uses: actions/upload-artifact@v4
         with:
           name: PDF
-          path: 'accelerated-jacow/*.pdf'
+          path: |
+            accelerated-jacow/*.pdf
+            accelerated-jacow/thumbnail.webp
           if-no-files-found: error
