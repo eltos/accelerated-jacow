@@ -6,8 +6,7 @@
  *
  */
 
-#import "/jacow.typ": jacow
-//#import "@preview/accelerated-jacow:0.1.0": jacow, eqnum
+#import "/jacow.typ": jacow, jacow-table
 
 #show: jacow.with(
   //paper-size: "a4",
@@ -99,18 +98,12 @@ should flow from top to bottom in each column).
 
 
 #figure(
-  table(
-    stroke: none,
-    columns: 3,
-    align: (x, y) => {if x==0 {left} else {center}},
-    table.hline(),
-    table.header[*Margin*][*A4 Paper*][*US Letter Paper*],
-    table.hline(),
-    [Top], [37 mm (1.46 in)], [0.75 in (19 mm)],
+  jacow-table("lcc",
+    [Margin], [A4 Paper],        [US Letter Paper],
+    [Top],    [37 mm (1.46 in)], [0.75 in (19 mm)],
     [Bottom], [19 mm (0.75 in)], [0.75 in (19 mm)],
-    [Left], [20 mm (0.79 in)], [0.79 in (20 mm)],
-    [Right], [20 mm (0.79 in)], [1.02 in (26 mm)],
-    table.hline(),
+    [Left],   [20 mm (0.79 in)], [0.79 in (20 mm)],
+    [Right],  [20 mm (0.79 in)], [1.02 in (26 mm)],
   ),
   placement: top, // top, bottom or auto
   caption: [Margin Specifications],
@@ -133,14 +126,6 @@ after the title and the support text at the bottom of the first
 column on page 1—in Word, use a text box; in LATEX, use
 \thanks. See also the subsection on footnotes.
 
-The names of authors, their organizations/affiliations and
-postal addresses should be grouped by affiliation and listed
-in 12 pt upper- and lowercase letters. The name of the
-submitting or primary author should be first, followed by the
-coauthors, alphabetically by affiliation. Where authors have
-multiple affiliations, the secondary affiliation may be 
-indicated with a superscript, as shown in the author listing of
-this paper. See ANNEX A for further examples.
 
 
 
