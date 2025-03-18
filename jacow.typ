@@ -20,6 +20,7 @@
   paper-size: "jacow",
   abstract-title: "Abstract",
   bibliography-title: "References",
+  page-limit: none,
   show-grid: false,
   body,
 ) = {
@@ -151,6 +152,14 @@
   set par(
     spacing: 0.65em,
     leading: 0.5em,
+  )
+
+  // Page limit warning
+  set page(
+    // add note in header until we have https://github.com/typst/typst/issues/1322
+    header: context if page-limit != none and query(<references>).at(0).location().page() > page-limit {
+      text(fill: red, size: 14pt, weight: "bold")[Paper exceeds limit of #page-limit pages!]
+    },
   )
 
 
@@ -367,7 +376,7 @@
   })
 
   // bibliography
-  set bibliography(title: bibliography-title, style: "jacow.csl")
+  set bibliography(title: [#bibliography-title <references>], style: "jacow.csl")
   show bibliography: it => {
     set text(9pt)
     set par(spacing: 9pt)
