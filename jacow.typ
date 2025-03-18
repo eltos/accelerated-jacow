@@ -79,7 +79,7 @@
   /// Heuristic until we have https://github.com/typst/typst/issues/1707
   let wordcaps(body) = {
     if body.has("text") {
-      let txt = lower(body.text)
+      let txt = body.text //lower(body.text)
       let words = txt.matches(regex("^()(\\w+)")) // first word
       words += txt.matches(regex("([.:;?!]\s+)(\\w+)")) // words after punctuation
       words += txt.matches(regex("()(\\w{4,})")) // words with 4+ letters
