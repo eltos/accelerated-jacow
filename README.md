@@ -57,7 +57,9 @@ It expects the following parameters:
 - `abstract` (content): The abstract
 - `pubmatter` (dict, optional): Pubmatter object with `title`, `author`, `affiliations` and/or `abstract` if not passed explicitly, e.g. `pubmatter.load(yaml("frontmatter.yml"))`
 - `funding` (str, optional): The funding note
+- `draft-note` (content, optional): A draft note (such as "Version 1") to be displayed in the top right corner
 - `page-limit` (int, optional): Generate a warning if the paper (excluding references) exceeds the page limit
+- `show-line-numbers` (bool, optional): Switch to enable line numbers
 - `show-grid` (bool, optional): Switch to enable a measurement grid for debugging purposes
 - `paper-size`: (str, optional): The paper size. One of "a4", "letter" or "jacow" (default), the latter being the intersection of the two former ones.
 

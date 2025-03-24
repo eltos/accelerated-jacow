@@ -21,6 +21,8 @@
   abstract-title: "Abstract",
   bibliography-title: "References",
   page-limit: none,
+  draft-note: none,
+  show-line-numbers: false,
   show-grid: false,
   body,
 ) = {
@@ -154,13 +156,24 @@
     leading: 0.5em,
   )
 
-  // Page limit warning
   set page(
-    // add note in header until we have https://github.com/typst/typst/issues/1322
-    header: context if page-limit != none and query(<references>).at(0).location().page() > page-limit {
-      text(fill: red, size: 14pt, weight: "bold")[Paper exceeds limit of #page-limit pages!]
-    },
+    header: grid(columns: (2fr, 3fr), align: (left, right))[
+      // Page limit warning with note in header
+      // until we have https://github.com/typst/typst/issues/1322
+      #set text(fill: red, size: 13pt, weight: "bold")
+      #context if page-limit != none and query(<references>).at(0).location().page() > page-limit [
+        Limit of #page-limit pages exceeded
+      ]      
+    ][
+      // Draft note
+      #set text(fill: red)
+      #draft-note
+    ]
   )
+  
+  
+  // Line numbers
+  set par.line(..if show-line-numbers {(numbering: it => text(fill: gray)[#it])})
 
 
   // Note: footnotes not working in parent scoped placement with two column mode.

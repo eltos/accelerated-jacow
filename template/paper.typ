@@ -37,7 +37,11 @@
   abstract: [
     This document demonstrates the usage of the accelerated-jacow paper template to compose papers for JACoW conference proceedings.
   ],
-  //show-grid: true
+  // Writing utilities
+  //draft-note: [*Draft 1* \u{2503} #datetime.today().display()],
+  //page-limit: 3,
+  //show-line-numbers: true,
+  //show-grid: true,
 )
 
 
