@@ -33,7 +33,7 @@ If you don't yet have the *TeX Gyre Termes* font family, you can install it with
  #import "@preview/accelerated-jacow:0.1.3": jacow, jacow-table
 ```
 
-To apply the template, use the `jacow` function with a show rule:
+To apply the template, use the `jacow` function with a show rule (see [template/paper.typ](template/paper.typ#L14-L45) for a comprehensive example):
 ```typ
 #show: jacow.with(
   title: [ Paper title ],
