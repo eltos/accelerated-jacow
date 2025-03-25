@@ -1,11 +1,3 @@
-/*
- * Example of typst paper to be published with JACoW
- * 
- * Based on the JACoW guide for preparation of papers.
- * See https://jacow.org/ for more information.
- *
- */
-
 #import "/jacow.typ": jacow, jacow-table
 
 #show: jacow.with(
