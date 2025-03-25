@@ -393,7 +393,23 @@
   show bibliography: it => {
     set text(9pt)
     set par(spacing: 9pt)
-    show link: it => text(font: "DejaVu Sans Mono", size: 7.2pt, it)
+    //show link: it => it.body // no clickable links as per JACoW demand
+    show regex("\b(https?://\S+|10(\.\d+)+/\S+)"): it => {
+      let it = if it.text.starts-with("10") [doi:#it] else {it}
+      let link = text(font: "DejaVu Sans Mono", size: 7.2pt, hyphenate: false, it)
+
+      // Put link in same line if it fits, otherwise force a line break
+      let link-on-new-line = state("link-on-new-line", false)
+      box(width: 1fr, layout(it => {
+        let fits-in-same-line = measure(link).width < it.width
+        link-on-new-line.update(it => not fits-in-same-line)
+        if fits-in-same-line { link }
+      }))
+      context if link-on-new-line.get() {
+        linebreak()
+        link
+      }
+    }
     it
   }
 

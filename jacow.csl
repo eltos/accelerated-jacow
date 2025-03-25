@@ -230,7 +230,8 @@
   <macro name="access">
     <choose>
       <if variable="DOI">
-        <text variable="DOI" prefix="doi:&#x00A0;"/>
+        <!--<text variable="DOI" prefix="doi:"/>-->
+        <text variable="DOI"/>
       </if>
       <else-if variable="URL">
         <text variable="URL"/>
