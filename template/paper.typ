@@ -103,12 +103,12 @@ Floating figures can be added and their placement can be controlled easily like 
 
 #figure(
   image("writer.svg"),
-  placement: bottom, // top, bottom or auto
+  placement: bottom, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
   caption: [Scientific writing (AI artwork).],
 ) <fig:writer>
 
 For JACoW style tables, the `jacow-table` function is provided.
-It takes the column alignment as first argument (here `lcrl` means left, center, right, left), followed by the table contents. With `placement: none`, @table:xydata is forced to appear exactly "here".
+It takes the column alignment as first argument (here `lcrl` means left, center, right, left), followed by the table contents.
 The optional `header` argument allows to adjust the appearance of the JACoW table style as shown in @table:specs.
 
 #figure(
@@ -118,7 +118,7 @@ The optional `header` argument allows to adjust the appearance of the JACoW tabl
     [2], [2.5],  qty(3, "dm"),  [Medium],
     [3], [18],  qty(1.5, "m"), [*Large*],
   ),
-  placement: none, // top, bottom, auto or none
+  //placement: none, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
   caption: [Dimensions],
 ) <table:xydata>
 
@@ -131,7 +131,7 @@ The optional `header` argument allows to adjust the appearance of the JACoW tabl
     [Cells], [3], [5], [9],
     [Quality], [100], [500], num(1000),
   ),
-  placement: none, // top, bottom, auto or none
+  //placement: none, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
   caption: [
     Imaginary specifications of a device for the three generations A, B and C
   ]
@@ -145,7 +145,7 @@ These support top, bottom or automatic placement as well.
 #figure(
   box(fill: silver, width: 100%, height: 2cm),
   scope: "parent", // two column-figure
-  placement: top, // top, bottom or auto
+  placement: top, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
   caption: [A column spanning figure. #lorem(21)],
 ) <fig:rect>
 
@@ -202,7 +202,7 @@ With the *lilaq* package, plots can be create directly in the document, so you c
     xlabel: [Angle ~ $x$ / rad], xlim: (0, 10),
     ylabel: [$y$ / m], ylim: (-1.5, 2.5),
   ),
-  placement: auto,
+  placement: auto, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
   caption: [A plot create with the Lilaq package directly inside the typst source code]
 ) <fig:lilaq>
 

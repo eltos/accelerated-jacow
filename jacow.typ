@@ -339,7 +339,7 @@
   show list: set list(indent: 1em)
 
   // figures
-  show figure: set figure(placement: auto)
+  //set figure(placement: auto) // default to floating figures
   show figure.where(placement: none): it => {
     // add a little spacing for inline figures and tables
     v(0.5em)
