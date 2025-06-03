@@ -256,18 +256,21 @@
       text(size: 12pt, {
         let also_at = ();
         for aff in authors.map(a => a.affiliation.at(0)).dedup() {
-          for auth in authors.filter(a => a.affiliation.at(0) == aff) {
-            // author name with superscripts
-            keep-together({
-              auth.name
-              for aff2 in auth.affiliation.slice(1) {
-                if aff2 not in also_at { also_at += (aff2,) }
-                super(str(also_at.len()))
-              }
-              if "email" in auth { titlefootnote(auth.email) }
-              ","
-            })
-            " "
+          // all authors per affiliation
+          let author_entry = {
+            let authors_here = authors.filter(a => a.affiliation.at(0) == aff)
+            for auth in authors_here {
+              // author name with superscripts
+              keep-together({
+                auth.name
+                for aff2 in auth.affiliation.slice(1) {
+                  if aff2 not in also_at { also_at += (aff2,) }
+                  super(str(also_at.len()))
+                }
+                if "email" in auth { titlefootnote(auth.email) }
+              })
+              if auth != authors_here.last() {", "}
+            }
           }
           // primary affiliations
           let a = affiliations.at(
@@ -278,8 +281,17 @@
             // trim whitespaces, but allow newlines at start for manual linebreak
             a = a.trim(" ").trim(at: end)
           }
-          keep-together(a) + "\n"
-        };
+          let affiliation_entry = keep-together(a)          
+          // print author and affiliation entries on same or separate lines
+          layout(it => {
+            let combined_entry = author_entry + ", " + affiliation_entry
+            if (measure(author_entry, width: it.width).height == measure(combined_entry, width: it.width).height){
+              combined_entry + "\n"
+            } else {
+              author_entry + affiliation_entry + "\n" // No comma here!
+            }
+          })
+        }
         // secondary affiliations
         for i in range(also_at.len()) {
           let a = affiliations.at(also_at.at(i)) // sec. aff. only via key
