@@ -384,6 +384,7 @@
       )
     })
   }
+  show "Figure": set text(hyphenate: false)
 
   // tables
   show figure.where(
