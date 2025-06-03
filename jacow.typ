@@ -155,7 +155,7 @@
       // Page limit warning with note in header
       // until we have https://github.com/typst/typst/issues/1322
       #set text(fill: red, size: 13pt, weight: "bold")
-      #context if page-limit != none and query(<references>).at(0).location().page() > page-limit [
+      #context if page-limit != none and query(<content-end>).at(0).location().page() > page-limit [
         Limit of #page-limit pages exceeded
       ]      
     ][
@@ -413,8 +413,12 @@
   })
 
   // bibliography
-  set bibliography(title: [#bibliography-title <references>], style: "jacow.csl")
+  set bibliography(title: none, style: "jacow.csl")
   show bibliography: it => {
+    // marker to check for page limit
+    [#block(height: 0pt, above: 0pt, below: 0pt)<content-end>] 
+    
+    heading(bibliography-title)
     set text(9pt)
     set par(spacing: 9pt)
     show grid.cell.where(x: 0): set align(right)
