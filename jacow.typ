@@ -108,43 +108,34 @@
   set document(title: title, author: authors.map(author => author.name))
 
 
-
   // layout
-
-  set page(columns: 2,
-    ..if paper-size == "a4" {
-      (paper: "a4", margin: (top: 37mm, bottom: 19mm, x: 20mm))
-    } else if paper-size in ("letter", "us-letter") {
-      (paper: "us-letter", margin: (y: 0.75in, left: 0.79in, right: 1.02in))
-    } else if paper-size == "jacow" { // jacow size is intersection of both
-      (width: 21cm, height: 11in, margin: (x: 20mm, y: 0.75in))
-    } else if paper-size == "test" {
-      (width: 21cm, height: auto, margin: (x: 20mm, y: 0.75in))
-    } else {
-      panic("Unsupported paper-size, use 'a4', 'us-letter' or 'jacow'!")
-    },
-    ..if show-grid {
-      (background: [
-        #let at = (x: 0pt, y: 0pt, c) => place(bottom + left, move(dx: x, dy: -y, c))
-        // grid
-        #for i in range(-1, 28){
-          let style = (length: 100%, stroke: silver)
-          at(x: 20mm + i*1cm, line(angle: 90deg, ..style))
-          at(y: 0.75in + i*0.5in, line(..style))
-          set text(fill: gray.darken(50%))
-          at(x: 20mm + i*1cm, y: 0.25in, if i == 1 [1 cm] else if i >= 0 [#i])
-          at(x: 1cm, y: 0.75in + i*0.5in, if i == 1 [½ in] else if i >= 0 {str(i/2).replace(".5", "½")})
-        }
-        // page and column borders
-        #at(rect(width: 21cm, height: 29.7cm)) // DIN A4
-        #at(rect(width: 8.5in, height: 11in)) // US letter
-        #at(x: 2cm, y: 0.75in, rect(width: 82.5mm, height: 9.5in, stroke: green))
-        #at(x: 19cm, y: 0.75in, rect(width: -82.5mm, height: 9.5in, stroke: green))
-      ])
-    }
+  
+  let paper = (
+    if lower(paper-size) == "a4" {(width: 21mm, height: 29.7mm)}
+    else if lower(paper-size) in ("us", "letter", "us-letter") {(width: 8.5in, height: 11in)}
+    else if lower(paper-size) in ("jacow", "test") {(width: 21cm, height: 11in)}
+    else {panic("Unsupported paper-size, use 'a4', 'us-letter' or 'jacow'!")}
+  )
+  // jacow margins slightly increased as per editor request 
+  let left-margin = 20mm
+  let column-width = 82.5mm - 0.4mm
+  let column-gutter = 5mm + 0.4mm
+  let bottom-margin = 0.75in + 0.1in
+  let column-height = 9.5in - 0.1in
+  
+  set page(
+    width: paper.width,
+    height: if lower(paper-size) == "test" {auto} else {paper.height},
+    margin: (
+      left: left-margin,
+      right: paper.width - left-margin - 2*column-width - column-gutter,
+      top: paper.height - bottom-margin - column-height + 0.005in,
+      bottom: bottom-margin + 0.03in
+    ),
+    columns: 2,
   )
 
-  set columns(gutter: 0.2in)
+  set columns(gutter: column-gutter)
 
   set text(
     font: "TeX Gyre Termes",
@@ -156,6 +147,9 @@
     leading: 0.5em,
   )
 
+  
+  // draft utilities
+  
   set page(
     header: grid(columns: (2fr, 3fr), align: (left, right))[
       // Page limit warning with note in header
@@ -168,11 +162,28 @@
       // Draft note
       #set text(fill: red)
       #draft-note
-    ]
+    ],    
+    ..if show-grid {
+      (background: [
+        #let at = (x: 0pt, y: 0pt, c) => place(bottom + left, move(dx: x, dy: -y, c))
+        // grid
+        #context for i in range(-1, 28){
+          let style = (length: 100%, stroke: silver)
+          at(x: left-margin + i*1cm, line(angle: 90deg, ..style))
+          at(y: bottom-margin + i*0.5in, line(..style))
+          set text(fill: gray.darken(50%))
+          at(x: left-margin + i*1cm, y: bottom-margin - 0.5in, if i == 1 [1 cm] else if i >= 0 [#i])
+          at(x: left-margin - 1cm, y: bottom-margin + i*0.5in, if i == 1 [½ in] else if i >= 0 {str(i/2).replace(".5", "½")})
+        }
+        // page and column borders
+        #at(rect(width: 21cm, height: 29.7cm)) // DIN A4
+        #at(rect(width: 8.5in, height: 11in)) // US letter
+        #at(x: left-margin, y: bottom-margin, rect(width: column-width, height: column-height, stroke: green))
+        #at(x: left-margin + column-width + column-gutter, y: bottom-margin, rect(width: column-width, height: column-height, stroke: green))
+      ])
+    }
   )
   
-  
-  // Line numbers
   set par.line(..if show-line-numbers {(numbering: it => text(fill: gray)[#it])})
 
 
@@ -219,6 +230,7 @@
        * Title
        */
 
+      v(0.75pt)
       text(size: 14pt, weight: "bold", [
         #allcaps(title)
         #if funding != none { titlefootnote(funding) }
