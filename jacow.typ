@@ -417,6 +417,8 @@
   show bibliography: it => {
     set text(9pt)
     set par(spacing: 9pt)
+    show grid.cell.where(x: 0): set align(right)
+    
     //show link: it => it.body // no clickable links as per JACoW demand
     show regex("\b(https?://\S+|10(\.\d+)+/\S+)"): it => {
       let it = if it.text.starts-with("10") [doi:#it] else {it}
