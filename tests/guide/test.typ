@@ -103,7 +103,7 @@ should flow from top to bottom in each column).
 
 
 #figure(
-  box(fill: silver, width: 75%, height: 8.3cm),
+  box(fill: silver, width: 75%, height: 7cm),
   placement: none,
   caption: [Layout of papers.],
 ) <fig:rect>
