@@ -84,7 +84,7 @@
      names: ("P. Dyer", "C. Hoffman", )),
     (at:"Budker Institute of Nuclear Physics, 630090 Novosibirsk, Russia",
      names: ("M. V. Kuzin", )),
-    (at:"Centre d’Etudes Nucléaires de Bordeaux Gradignan,\nUniversité de Bordeaux/IN2P3/CNRS, 33175 Gradignan, France",
+    (at:", Centre d’Etudes Nucléaires de Bordeaux Gradignan,\nUniversité de Bordeaux/IN2P3/CNRS, 33175 Gradignan, France",
      names: ("L. Serani", )),
     (at:"Deutsches Elektronen-Synchrotron, 22607 Hamburg, Germany",
      names: ("M. Marx", )),

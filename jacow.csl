@@ -195,8 +195,8 @@
       </if>
       <else-if type="paper-conference report bill" match="any">
         <date variable="issued">
-          <date-part name="month" form="short"/>
-          <date-part name="year" prefix=" "/>
+          <date-part name="month" form="short" suffix=" "/>
+          <date-part name="year"/>
         </date>
       </else-if>
       <else-if type="motion_picture song" match="any">
@@ -315,7 +315,6 @@
             <text macro="container-title"/>
             <text macro="locators"/>
             <text macro="page"/>
-            <text macro="publisher"/>
             <text macro="issued"/>
             <text macro="status"/>
           </group>
@@ -350,12 +349,8 @@
             <text macro="author"/>
             <text macro="title"/>
             <text variable="authority"/>
-            <text variable="issue"/>
             <text macro="publisher"/>
-            <group delimiter=" ">
-              <text variable="genre"/>
-              <text variable="number"/>
-            </group>
+            <text variable="issue" prefix="Rep. "/>
             <text macro="issued"/>
           </group>
           <text macro="access" prefix=" "/>
@@ -482,12 +477,12 @@
           <text macro="access" prefix=" "/>
         </else-if>
         
-        <else>
+        <else> <!-- misc -->
           <group delimiter=", " suffix=". ">
             <text macro="author"/>
             <text macro="title"/>
             <text variable="container-title" font-style="italic"/>
-            <text macro="locators"/>
+            <text macro="locators" font-style="italic"/>
             <text macro="collection"/>
             <text macro="publisher"/>
             <text macro="page"/>

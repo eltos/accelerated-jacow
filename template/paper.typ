@@ -57,7 +57,7 @@
 
 Typst @typst // a citation to the respective entry in "references.bib" (see below)
 is a great, modern and blazingly fast typesetting system focussed on scientific papers.
-It is markup based, supporting *strong* _emphasis_ of text, #underline[underlining], `monospace` font, smart "quotes" and much more.
+Being markup based, it supports *strong* _emphasis_ of text, #underline[underlining], `monospace` font, smart "quotes" and much more.
 Equations can be typeset inline like $beta_"x" (s)$, and in display mode:
 
 $
@@ -71,7 +71,7 @@ $
   e^("i" pi) + 1 = 0 
 $ <eq:mycustomlabel>
 
-we can reference @eq:mycustomlabel. // a reference to a labelled equation
+they can be referenced as in @eq:mycustomlabel. // a reference to a labelled equation
 The same works for @fig:writer and @table:xydata too.
 Remember to use the long form at the beginning of a sentence:
 @fig:writer[Figure].
@@ -84,7 +84,7 @@ Done.
 The accelerated-jacow template is based on the JACoW paper preparation guide @jacowguide @jacow.org. // citations
 It takes care of proper page size, margins and spacing, generates the front matter with properly formatted title, author list, footnotes and abstract using the show-rule at the top of this document and formats headings, tables, references and more.
 
-Headings are automatically transformed to all-caps and word-caps case as specified by the paper preparation guide.
+Headings are automatically transformed to all-caps and word-caps case respectively.
 Should you require custom control on upper/lower case, this can be forced not only in the title (see above), but also in headings like so:
 
 #let nacl = [#upper[N]#lower[a]#upper[C]#lower[l]]
@@ -146,7 +146,7 @@ These support top, bottom or automatic placement as well.
   box(fill: silver, width: 100%, height: 2cm),
   scope: "parent", // two column-figure
   placement: top, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
-  caption: [A column spanning figure. #lorem(21)],
+  caption: [A column spanning figure. #lorem(41)],
 ) <fig:rect>
 
 
@@ -192,15 +192,20 @@ With the *lilaq* package, plots can be create directly in the document, so you c
 
 #figure(
   lq.diagram(
-    // sine
+    
+    // plot a sine function
     let x = lq.linspace(0, 10),
     let y = x.map(x => calc.cos(x)),
     lq.plot(x, y, mark: none, label: [$cos(x)$]),
-    // data
+    
+    // plot some data (practically you can load data from a file using `json` etc.)
     lq.plot((1, 2, 3, 7, 9), (-1, 1.8, 0.7, -0.3, 1), yerr: 0.3, mark: "o", stroke: (dash: "dashed"), label: [Data]),
-    // plot layout
+    
+    // adjust plot layout
+    height: 3cm,
     xlabel: [Angle ~ $x$ / rad], xlim: (0, 10),
     ylabel: [$y$ / m], ylim: (-1.5, 2.5),
+    
   ),
   placement: auto, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
   caption: [A plot create with the Lilaq package directly inside the typst source code]
@@ -229,15 +234,16 @@ For more details, refer to https://typst.app/universe/package/glossy.
 
 
 
-= Conclusions
-#lorem(42)
+= Citations
+Reference formatting uses standard bib files.
+The bib snippets can conveniently be copied by selecting the format type "BibTex" when using the JACoW reference search tool at https://refs.jacow.org/.
+Examples are given below @typst @jacowguide @jacow.org @example-journal-article @example-report @example-book @example-book-chapter @example-thesis @example-jacow-unpublished.
 
-= Acknowledgements
-#lorem(42)
 
 
 
 #bibliography("references.bib")
+
 
 
 // Workaround until balanced columns are available
@@ -246,7 +252,7 @@ For more details, refer to https://typst.app/universe/package/glossy.
   bottom,
   scope: "parent",
   float: true,
-  clearance: 108pt, // TODO: increase clearance for manual column balancing
+  clearance: 70pt, // TODO: increase clearance for manual column balancing
   []
 )
 

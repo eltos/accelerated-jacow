@@ -108,43 +108,37 @@
   set document(title: title, author: authors.map(author => author.name))
 
 
-
   // layout
-
-  set page(columns: 2,
-    ..if paper-size == "a4" {
-      (paper: "a4", margin: (top: 37mm, bottom: 19mm, x: 20mm))
-    } else if paper-size in ("letter", "us-letter") {
-      (paper: "us-letter", margin: (y: 0.75in, left: 0.79in, right: 1.02in))
-    } else if paper-size == "jacow" { // jacow size is intersection of both
-      (width: 21cm, height: 11in, margin: (x: 20mm, y: 0.75in))
-    } else if paper-size == "test" {
-      (width: 21cm, height: auto, margin: (x: 20mm, y: 0.75in))
-    } else {
-      panic("Unsupported paper-size, use 'a4', 'us-letter' or 'jacow'!")
-    },
-    ..if show-grid {
-      (background: [
-        #let at = (x: 0pt, y: 0pt, c) => place(bottom + left, move(dx: x, dy: -y, c))
-        // grid
-        #for i in range(-1, 28){
-          let style = (length: 100%, stroke: silver)
-          at(x: 20mm + i*1cm, line(angle: 90deg, ..style))
-          at(y: 0.75in + i*0.5in, line(..style))
-          set text(fill: gray.darken(50%))
-          at(x: 20mm + i*1cm, y: 0.25in, if i == 1 [1 cm] else if i >= 0 [#i])
-          at(x: 1cm, y: 0.75in + i*0.5in, if i == 1 [½ in] else if i >= 0 {str(i/2).replace(".5", "½")})
-        }
-        // page and column borders
-        #at(rect(width: 21cm, height: 29.7cm)) // DIN A4
-        #at(rect(width: 8.5in, height: 11in)) // US letter
-        #at(x: 2cm, y: 0.75in, rect(width: 82.5mm, height: 9.5in, stroke: green))
-        #at(x: 19cm, y: 0.75in, rect(width: -82.5mm, height: 9.5in, stroke: green))
-      ])
-    }
+  
+  let paper = (
+    if lower(paper-size) == "a4" {(width: 21mm, height: 29.7mm)}
+    else if lower(paper-size) in ("us", "letter", "us-letter") {(width: 8.5in, height: 11in)}
+    else if lower(paper-size) in ("jacow", "test") {(width: 21cm, height: 11in)}
+    else {panic("Unsupported paper-size, use 'a4', 'us-letter' or 'jacow'!")}
+  )
+  
+  // jacow margins slightly increased as per editor request 
+  let left-margin = 20mm
+  let column-width = 82.5mm
+  let column-gutter = 5mm
+  let bottom-margin = 0.75in + 0.1in
+  let column-height = 9.5in - 0.1in
+  
+  set page(
+    width: paper.width,
+    height: if lower(paper-size) == "test" {auto} else {paper.height},
+    margin: (
+      left: left-margin,
+      right: paper.width - left-margin - 2*column-width - column-gutter + 0.4mm,
+      top: paper.height - bottom-margin - column-height + 0.005in,
+      bottom: bottom-margin + 0.03in
+    ),
+    columns: 2,
   )
 
-  set columns(gutter: 0.2in)
+  set columns(gutter: column-gutter + 0.4mm)
+
+
 
   set text(
     font: "TeX Gyre Termes",
@@ -156,23 +150,43 @@
     leading: 0.5em,
   )
 
+  
+  // draft utilities
+  
   set page(
     header: grid(columns: (2fr, 3fr), align: (left, right))[
       // Page limit warning with note in header
       // until we have https://github.com/typst/typst/issues/1322
       #set text(fill: red, size: 13pt, weight: "bold")
-      #context if page-limit != none and query(<references>).at(0).location().page() > page-limit [
+      #context if page-limit != none and query(<content-end>).at(0).location().page() > page-limit [
         Limit of #page-limit pages exceeded
       ]      
     ][
       // Draft note
       #set text(fill: red)
       #draft-note
-    ]
+    ],    
+    ..if show-grid {
+      (background: [
+        #let at = (x: 0pt, y: 0pt, c) => place(bottom + left, move(dx: x, dy: -y, c))
+        // grid
+        #context for i in range(-1, 28){
+          let style = (length: 100%, stroke: silver)
+          at(x: left-margin + i*1cm, line(angle: 90deg, ..style))
+          at(y: bottom-margin + i*0.5in, line(..style))
+          set text(fill: gray.darken(50%))
+          at(x: left-margin + i*1cm, y: bottom-margin - 0.5in, if i == 1 [1 cm] else if i >= 0 [#i])
+          at(x: left-margin - 1cm, y: bottom-margin + i*0.5in, if i == 1 [½ in] else if i >= 0 {str(i/2).replace(".5", "½")})
+        }
+        // page and column borders
+        #at(rect(width: 21cm, height: 29.7cm)) // DIN A4
+        #at(rect(width: 8.5in, height: 11in)) // US letter
+        #at(x: left-margin, y: bottom-margin, rect(width: column-width, height: column-height, stroke: green))
+        #at(x: left-margin + column-width + column-gutter, y: bottom-margin, rect(width: column-width, height: column-height, stroke: green))
+      ])
+    }
   )
   
-  
-  // Line numbers
   set par.line(..if show-line-numbers {(numbering: it => text(fill: gray)[#it])})
 
 
@@ -219,6 +233,7 @@
        * Title
        */
 
+      v(0.75pt)
       text(size: 14pt, weight: "bold", [
         #allcaps(title)
         #if funding != none { titlefootnote(funding) }
@@ -244,18 +259,21 @@
       text(size: 12pt, {
         let also_at = ();
         for aff in authors.map(a => a.affiliation.at(0)).dedup() {
-          for auth in authors.filter(a => a.affiliation.at(0) == aff) {
-            // author name with superscripts
-            keep-together({
-              auth.name
-              for aff2 in auth.affiliation.slice(1) {
-                if aff2 not in also_at { also_at += (aff2,) }
-                super(str(also_at.len()))
-              }
-              if "email" in auth { titlefootnote(auth.email) }
-              ","
-            })
-            " "
+          // all authors per affiliation
+          let author_entry = {
+            let authors_here = authors.filter(a => a.affiliation.at(0) == aff)
+            for auth in authors_here {
+              // author name with superscripts
+              keep-together({
+                auth.name
+                for aff2 in auth.affiliation.slice(1) {
+                  if aff2 not in also_at { also_at += (aff2,) }
+                  super(str(also_at.len()))
+                }
+                if "email" in auth { titlefootnote(auth.email) }
+              })
+              if auth != authors_here.last() {", "}
+            }
           }
           // primary affiliations
           let a = affiliations.at(
@@ -266,8 +284,17 @@
             // trim whitespaces, but allow newlines at start for manual linebreak
             a = a.trim(" ").trim(at: end)
           }
-          keep-together(a) + "\n"
-        };
+          let affiliation_entry = keep-together(a)          
+          // print author and affiliation entries on same or separate lines
+          layout(it => {
+            let combined_entry = author_entry + ", " + affiliation_entry
+            if (measure(author_entry, width: it.width).height == measure(combined_entry, width: it.width).height){
+              combined_entry + "\n"
+            } else {
+              author_entry + affiliation_entry + "\n" // No comma here!
+            }
+          })
+        }
         // secondary affiliations
         for i in range(also_at.len()) {
           let a = affiliations.at(also_at.at(i)) // sec. aff. only via key
@@ -360,6 +387,7 @@
       )
     })
   }
+  show "Figure": set text(hyphenate: false)
 
   // tables
   show figure.where(
@@ -389,26 +417,40 @@
   })
 
   // bibliography
-  set bibliography(title: [#bibliography-title <references>], style: "jacow.csl")
+  set bibliography(title: none, style: "jacow.csl")
   show bibliography: it => {
+    // marker to check for page limit
+    [#block(height: 0pt, above: 0pt, below: 0pt)<content-end>] 
+    
+    heading(bibliography-title)
     set text(9pt)
     set par(spacing: 9pt)
+    show grid.cell.where(x: 0): set align(right)
+    
     //show link: it => it.body // no clickable links as per JACoW demand
     show regex("\b(https?://\S+|10(\.\d+)+/\S+)"): it => {
-      let it = if it.text.starts-with("10") [doi:#it] else {it}
+      let is-doi = it.text.starts-with("10")
+      let it = if is-doi [doi:#it] else {it}
       let link = text(font: "DejaVu Sans Mono", size: 7.2pt, hyphenate: false, it)
 
-      // Put link in same line if it fits, otherwise force a line break
-      let link-on-new-line = state("link-on-new-line", false)
-      box(width: 1fr, layout(it => {
-        let fits-in-same-line = measure(link).width < it.width
-        link-on-new-line.update(it => not fits-in-same-line)
-        if fits-in-same-line { link }
-      }))
-      context if link-on-new-line.get() {
-        linebreak()
+      if is-doi {
+        // Avoid breaking DOI: Put in same line if it fits, otherwise force into new line
+        let link-on-new-line = state("link-on-new-line", false)
+        box(width: 1fr, layout(it => {
+          let fits-in-same-line = measure(link).width < it.width
+          link-on-new-line.update(it => not fits-in-same-line)
+          if fits-in-same-line { link }
+        }))
+        context if link-on-new-line.get() {
+          linebreak()
+          link
+        }
+      } else {
+        // URL
         link
+        if it.text.ends-with("/") [.]
       }
+      
     }
     it
   }
