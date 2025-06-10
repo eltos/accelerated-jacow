@@ -116,10 +116,11 @@
     else if lower(paper-size) in ("jacow", "test") {(width: 21cm, height: 11in)}
     else {panic("Unsupported paper-size, use 'a4', 'us-letter' or 'jacow'!")}
   )
+  
   // jacow margins slightly increased as per editor request 
   let left-margin = 20mm
-  let column-width = 82.5mm - 0.4mm
-  let column-gutter = 5mm + 0.4mm
+  let column-width = 82.5mm
+  let column-gutter = 5mm
   let bottom-margin = 0.75in + 0.1in
   let column-height = 9.5in - 0.1in
   
@@ -128,14 +129,16 @@
     height: if lower(paper-size) == "test" {auto} else {paper.height},
     margin: (
       left: left-margin,
-      right: paper.width - left-margin - 2*column-width - column-gutter,
+      right: paper.width - left-margin - 2*column-width - column-gutter + 0.4mm,
       top: paper.height - bottom-margin - column-height + 0.005in,
       bottom: bottom-margin + 0.03in
     ),
     columns: 2,
   )
 
-  set columns(gutter: column-gutter)
+  set columns(gutter: column-gutter + 0.4mm)
+
+
 
   set text(
     font: "TeX Gyre Termes",
