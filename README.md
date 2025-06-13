@@ -54,9 +54,11 @@ It expects the following parameters:
   - `email` (str, optional): The email address for the corresponding author(s)
 - `affiliations` (dict): Dictionary mapping affiliation keys as used with `at` in the author list to their full form (str or content, e.g. "Affiliation, City, Country").
   It is possible to insert newline characters to manually adjust the layout if required.
-- `abstract` (content): The abstract
-- `pubmatter` (dict, optional): Pubmatter object with `title`, `author`, `affiliations` and/or `abstract` if not passed explicitly, e.g. `pubmatter.load(yaml("frontmatter.yml"))`
+- `group-by-affiliation` (bool, optional): By default (true), the author list is grouped by affiliation. Set this to false to print all authors alphabetically with superscripts indicating their respective affiliation(s).
+- `on-behalf-of` (str or content or none): Name of the collaboration. If set, inserts a not "on behalf of ..." below the author list.
 - `funding` (str, optional): The funding note
+- `pubmatter` (dict, optional): Pubmatter object with `title`, `author`, `affiliations` and/or `abstract` if not passed explicitly, e.g. `pubmatter.load(yaml("frontmatter.yml"))`
+- `abstract` (content): The abstract
 - `draft-note` (content, optional): A draft note (such as "Version 1") to be displayed in the top right corner
 - `page-limit` (int, optional): Generate a warning if the paper (excluding references) exceeds the page limit
 - `show-line-numbers` (bool, optional): Switch to enable line numbers

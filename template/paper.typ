@@ -12,11 +12,13 @@
 #import "@preview/accelerated-jacow:0.1.5": jacow, jacow-table
 
 #show: jacow.with(
+
   // Paper title
   title: [
     Accelerated JAC#lower[o]W paper template\
     for conference proceedings
   ],
+
   // Author list
   authors: (
     (name: "C. Author", at: "uni", email: "mail@example.com"),
@@ -31,12 +33,15 @@
     INP: "Insitute of Nobel Physics, Stockhold, Sweden",
     third: [The Third Institute, City, Country],
   ),
-  // Funding note (optional, comment out if not applicable)
+  //on-behalf-of: "the XXX collaboration",
+  //group-by-affiliation: false,
   funding: "Work supported by ...",
+
   // Paper abstract
   abstract: [
     This document demonstrates the usage of the accelerated-jacow paper template to compose papers for JACoW conference proceedings.
   ],
+
   // Writing utilities
   //draft-note: [*Draft 1* \u{2503} #datetime.today().display()],
   //page-limit: 3,

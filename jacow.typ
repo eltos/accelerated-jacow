@@ -14,6 +14,8 @@
   title: none,
   authors: (),
   affiliations: (:),
+  group-by-affiliation: true,
+  on-behalf-of: none,
   abstract: none,
   pubmatter: none,
   funding: none,
@@ -257,54 +259,102 @@
         }
       }
 
-      text(size: 12pt, {
-        let also_at = ();
-        for aff in authors.map(a => a.affiliation.at(0)).dedup() {
-          // all authors per affiliation
-          let author_entry = {
-            let authors_here = authors.filter(a => a.affiliation.at(0) == aff)
-            for auth in authors_here {
-              // author name with superscripts
-              keep-together({
-                auth.name
-                for aff2 in auth.affiliation.slice(1) {
-                  if aff2 not in also_at { also_at += (aff2,) }
-                  super(str(also_at.len()))
-                }
-                if "email" in auth { titlefootnote(auth.email) }
-              })
-              if auth != authors_here.last() {", "}
-            }
-          }
-          // primary affiliations
-          let a = affiliations.at(
-            // allow passing prim. aff. directly, but only if it's a proper one
-            aff, ..if "," in aff {(default: aff)}
-          )
-          if type(a) == str {
-            // trim whitespaces, but allow newlines at start for manual linebreak
+      let author_entry(author, numbers: none) = {
+        keep-together({
+          author.name
+          if "email" in author { titlefootnote(author.email) }
+          if numbers != none { super(typographic: false, numbers.map(str).sorted().join(",")) }
+        })
+      }
+
+      let affiliation_entry(id, number: none, prefix: none) = {
+        let a = affiliations.at(
+          // allow passing prim. aff. directly, but only if it's a proper one
+          id, ..if "," in id {(default: id)}
+        )
+        if type(a) == str {
+          if number != none or prefix != none { // trim whitespaces
+            a = a.trim()
+          } else { // but allow newlines at start for manual linebreak control
             a = a.trim(" ").trim(at: end)
           }
-          let affiliation_entry = keep-together(a)          
-          // print author and affiliation entries on same or separate lines
-          layout(it => {
-            let combined_entry = author_entry + ", " + affiliation_entry
-            if (measure(author_entry, width: it.width).height == measure(combined_entry, width: it.width).height){
-              combined_entry + "\n"
-            } else {
-              author_entry + affiliation_entry + "\n" // No comma here!
-            }
-          })
         }
-        // secondary affiliations
-        for i in range(also_at.len()) {
-          let a = affiliations.at(also_at.at(i)) // sec. aff. only via key
-          if type(a) == str { a = a.trim() }
-          keep-together(
-            super(str(i + 1)) + "also at " + a
-          )
-          "\n"
-        };
+        keep-together({
+          if number != none { super(typographic: false, str(number)) }
+          if prefix != none { prefix }
+          a
+        })
+      }
+
+      text(size: 12pt, {
+
+        if group-by-affiliation {
+
+          // Grouped by Affiliation
+          // **********************
+
+          let primary_affiliations = authors.map(a => a.affiliation.first()).dedup()
+          let also_at = authors
+            .sorted(key: a => primary_affiliations.position(i => i == a.affiliation.first()))
+            .map(a => a.affiliation.slice(1)).flatten().dedup()
+          also_at = also_at.zip(range(1, 1+also_at.len())).to-dict()
+
+          // author list with primary affiliation
+          for aff in primary_affiliations {
+
+            let author_content = authors
+              .filter(a => a.affiliation.first() == aff)
+              .map(a => author_entry(a, numbers: a.affiliation.slice(1).map(i => also_at.at(i))))
+              .join(", ")
+
+            let affiliation_content = affiliation_entry(aff)
+
+            // print author and primary affiliation entries on same or separate lines
+            layout(it => {
+              let combined_entry = author_content + ", " + affiliation_content
+              if (measure(author_content, width: it.width).height == measure(combined_entry, width: it.width).height){
+                combined_entry + "\n"
+              } else {
+                author_content + affiliation_content + "\n" // No comma here!
+              }
+            })
+
+          }
+
+          // secondary affiliations
+          for (a, i) in also_at {
+            affiliation_entry(a, number: i, prefix: "also at ")
+            linebreak()
+          }
+
+
+        } else {
+
+          // Grouped by Author
+          // *****************
+
+          let at = authors.map(a => a.affiliation).flatten().dedup()
+          at = at.zip(range(1, 1+at.len())).to-dict()
+          if at.len() == 1 { at = (at.keys().first(): "") }
+
+          // author list
+          authors.map(
+            a => author_entry(a, numbers: a.affiliation.map(i => at.at(i))),
+          ).join(", ")
+          linebreak()
+
+          // affiliations
+          for (a, i) in at {
+            affiliation_entry(a, number: i)
+            linebreak()
+          }
+
+        }
+
+        if on-behalf-of != none {
+          "on behalf of " + on-behalf-of
+        }
+
       })
       v(1pt)
 
