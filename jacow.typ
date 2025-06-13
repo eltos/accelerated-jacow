@@ -49,6 +49,7 @@
 
 
   // sanitize author list
+  if type(authors) == dictionary { authors = (authors,) } // single author case
   for a in authors.filter(a => "names" in a.keys()) {
     for name in a.remove("names") {
       authors.insert(-1, (name: name, ..a))
