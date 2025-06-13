@@ -11,21 +11,56 @@
  */
 
 #let jacow(
+  /// The paper title
+  /// -> content | str | none
   title: none,
+  /// The list of authors
+  /// where each author is a dictionary with keys `name` or `names`, `at` and optionally also `email`
+  /// -> array
   authors: (),
+  /// The list of affiliations
+  /// mapping the keys used in the authors list as `at` to the affiliation name
+  /// -> dictionary
   affiliations: (:),
+  /// Switch to chagne between author list grouped by affiliation (default) or using superscripts to indicate affiliations
+  /// -> bool
   group-by-affiliation: true,
+  /// Optional name of collaboration the author is writing the paper on behalf of
+  /// -> none | str | content
   on-behalf-of: none,
+  /// The paper abstract
+  /// -> content | str | none
   abstract: none,
+  /// Optional pubmatter object
+  /// with `title`, `author`, `affiliations` and/or `abstract` if not passed explicitly
+  /// -> dictionary
   pubmatter: none,
+  /// Optional funding note
+  /// -> none | str
   funding: none,
+  /// The paper size
+  /// -> "jacow" | "a4" | "letter"
   paper-size: "jacow",
+  /// The heading used for the abstract
+  /// -> str | content
   abstract-title: "Abstract",
+  /// The heading used for the references
+  /// -> str | content
   bibliography-title: "References",
+  /// Optional page limit to show a warning when the paper length exceeds the limit
+  /// -> none | int
   page-limit: none,
+  /// Optional note to show on the paper, e.g. to indicate a draft revision number
+  /// -> none | str | content
   draft-note: none,
+  /// Switch to show line numbers
+  /// -> bool
   show-line-numbers: false,
+  /// Switch to show gridlines and column margins
+  /// -> bool
   show-grid: false,
+  /// The paper content
+  /// -> content
   body,
 ) = {
 
