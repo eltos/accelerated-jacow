@@ -298,7 +298,7 @@
         keep-together({
           author.name
           if "email" in author { titlefootnote(author.email) }
-          if numbers != none { super(typographic: false, numbers.map(str).sorted().join(",")) }
+          if numbers != none { super(typographic: false, numbers.sorted().map(str).join(",")) }
         })
       }
 
