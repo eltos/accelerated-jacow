@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        typst-version: [ '0.13' ]
+        typst-version: [ '0.13.1' ]
     steps:
       - uses: typst-community/setup-typst@v4
         with:
@@ -58,7 +58,7 @@ jobs:
         uses: baptiste0928/cargo-install@v3
         with:
           crate: tytanic
-          version: '0.2.1'
+          version: '0.2.2'
       - name: Install font
         run: |
           sudo apt install tex-gyre
