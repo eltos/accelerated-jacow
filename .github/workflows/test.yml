@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        typst-version: [ '0.13' ]
+        typst-version: [ '0.13.1' ]
     steps:
       - uses: typst-community/setup-typst@v4
         with:
