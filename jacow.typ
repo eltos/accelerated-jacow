@@ -87,10 +87,16 @@
 
   // sanitize author list
   if type(authors) == dictionary { authors = (authors,) } // single author case
-  for a in authors.filter(a => "names" in a.keys()) {
-    for name in a.remove("names") {
-      authors.insert(-1, (name: name, ..a))
+  let i = 0;
+  while i < authors.len() {
+    let a = authors.at(i)
+    if "names" in a {
+      for name in a.remove("names") {
+        authors.insert(i, (name: name, ..a))
+        i += 1
+      }
     }
+    i += 1
   }
   authors = authors.map(a => {
     if "by" in a.keys() { a.insert("name", a.remove("by")) }
