@@ -431,6 +431,7 @@
     set text(size: 12pt, weight: "bold", style: "normal", hyphenate: false)
     block(
       below: 2pt,
+      sticky: true,
       allcaps(it.body)
     )
     h(1em)
@@ -442,6 +443,7 @@
     set text(size: 12pt, weight: "regular", style: "italic", hyphenate: false)
     block(
       below: 2pt,
+      sticky: true,
       wordcaps(it.body)
     )
     h(1em)
