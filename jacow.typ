@@ -493,7 +493,7 @@
   show math.equation: it => {
     if it.block and not it.has("label") [
         #counter(math.equation).update(v => v - 1)
-        #math.equation(it.body, block: true, numbering: none)#label("")
+        #math.equation(it.body, block: true, numbering: none)#label("_unnumbered")
     ] else {
       it
     }  

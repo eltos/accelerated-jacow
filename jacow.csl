@@ -350,7 +350,14 @@
             <text macro="title"/>
             <text variable="authority"/>
             <text macro="publisher"/>
-            <text variable="issue" prefix="Rep. "/>
+            <choose>
+              <if variable="number">
+                <text variable="number" prefix="Rep. "/>
+              </if>
+              <else>
+                <text variable="issue" prefix="Rep. "/>
+              </else>
+            </choose>
             <text macro="issued"/>
           </group>
           <text macro="access" prefix=" "/>
