@@ -192,6 +192,12 @@
   set par(
     spacing: 0.65em,
     leading: 0.5em,
+    ..if sys.version >= version(0, 14) {(
+      justification-limits: (
+        spacing: (min: 70%, max: 130%),
+        tracking: (min: -0.01em, max: 0.02em),
+      )
+    )}
   )
 
   
@@ -277,12 +283,22 @@
        * Title
        */
 
+
       v(0.75pt)
-      text(size: 14pt, weight: "bold", [
-        #allcaps(title)
-        #if funding != none { titlefootnote(funding) }
-      ])
-      v(8pt)
+      if (sys.version < version(0, 14)){
+        text(size: 14pt, weight: "bold", [
+          #allcaps(title)
+          #if funding != none { titlefootnote(funding) }
+        ])
+        v(8pt)
+      } else {
+        show std.title: set text(size: 14pt, weight: "bold")
+        show std.title: set block(below: 17pt)
+        std.title({
+          allcaps(title)
+          if funding != none { titlefootnote(funding) }
+        })  
+      }
 
 
       /*
