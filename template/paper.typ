@@ -12,7 +12,6 @@
 #import "@preview/accelerated-jacow:0.1.5": jacow, jacow-table
 
 #show: jacow.with(
-
   // Paper title
   title: [
     Accelerated JAC#lower[o]W paper template\
@@ -51,7 +50,7 @@
 
 
 // Other useful packages, see below for usage examples
-#import "@preview/unify:0.7.1": unit, num, qty, numrange, qtyrange
+#import "@preview/unify:0.7.1": num, numrange, qty, qtyrange, unit
 #import "@preview/glossy:0.7.0": init-glossary
 #import "@preview/lilaq:0.1.0" as lq
 #import "@preview/physica:0.9.5": *
@@ -66,14 +65,14 @@ Being markup based, it supports *strong* _emphasis_ of text, #underline[underlin
 Equations can be typeset inline like $beta_"x" (s)$, and in display mode:
 
 $
-  curl E &= - pdv(B, t) \
-  integral.cont_(partial A) E dd(s) &= - integral.double_A pdv(B, t) dd(A)
+                             curl E & = - pdv(B, t) \
+  integral.cont_(partial A) E dd(s) & = - integral.double_A pdv(B, t) dd(A)
 $
 
 By adding a label
 
 $
-  e^("i" pi) + 1 = 0 
+  e^("i" pi) + 1 = 0
 $ <eq:mycustomlabel>
 
 they can be referenced as in @eq:mycustomlabel. // a reference to a labelled equation
@@ -95,7 +94,7 @@ Should you require custom control on upper/lower case, this can be forced not on
 #let nacl = [#upper[N]#lower[a]#upper[C]#lower[l]]
 
 
-== Subsection heading: #nacl, #upper[N]#lower[a]Cl, $"NaCl"$, $isotope("He", a:4, z:2)$
+== Subsection heading: #nacl, #upper[N]#lower[a]Cl, $"NaCl"$, $isotope("He", a: 4, z: 2)$
 
 === A third level heading
 // <-- no blank line here!
@@ -117,11 +116,12 @@ It takes the column alignment as first argument (here `lcrl` means left, center,
 The optional `header` argument allows to adjust the appearance of the JACoW table style as shown in @table:specs.
 
 #figure(
+  // @typstyle off
   jacow-table("lcrl",
     [No.], [$x$ / mm], [$y$], [Note],
-    [1], [0.32], qty(70, "cm"), [Small],
-    [2], [2.5],  qty(3, "dm"),  [Medium],
-    [3], [18],  qty(1.5, "m"), [*Large*],
+    [1],   [0.32],     qty(70, "cm"), [Small],
+    [2],   [2.5],      qty(3, "dm"),  [Medium],
+    [3],   [18],       qty(1.5, "m"), [*Large*],
   ),
   //placement: none, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
   caption: [Dimensions],
@@ -129,17 +129,18 @@ The optional `header` argument allows to adjust the appearance of the JACoW tabl
 
 
 #figure(
+  // @typstyle off
   jacow-table("lccc", header: top+left, // top, left or none
-    [], [Gen A], [Gen B], [Gen C],
+    [],          [Gen A],      [Gen B],      [Gen C],
     [Frequency], table.cell(qty(1234567.89, "Hz"), colspan: 3, align: center),
-    [Voltage], qty(1, "kV"), qty(3, "kV"), qty(3, "kV"),
-    [Cells], [3], [5], [9],
-    [Quality], [100], [500], num(1000),
+    [Voltage],   qty(1, "kV"), qty(3, "kV"), qty(3, "kV"),
+    [Cells],     [3],          [5],          [9],
+    [Quality],   [100],        [500],        num(1000),
   ),
   //placement: none, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
   caption: [
     Imaginary specifications of a device for the three generations A, B and C
-  ]
+  ],
 ) <table:specs>
 
 
@@ -193,27 +194,37 @@ With the *lilaq* package, plots can be create directly in the document, so you c
 // general plot styling options
 #show lq.selector(lq.diagram): set text(.9em)
 #show: lq.set-tick(outset: 3pt, inset: 0pt)
-#show: lq.set-diagram(xaxis: (mirror: (ticks: false)), yaxis: (mirror: (ticks: false)))
+#show: lq.set-diagram(
+  xaxis: (mirror: (ticks: false)),
+  yaxis: (mirror: (ticks: false)),
+)
 
 #figure(
   lq.diagram(
-    
     // plot a sine function
     let x = lq.linspace(0, 10),
     let y = x.map(x => calc.cos(x)),
     lq.plot(x, y, mark: none, label: [$cos(x)$]),
-    
+
     // plot some data (practically you can load data from a file using `json` etc.)
-    lq.plot((1, 2, 3, 7, 9), (-1, 1.8, 0.7, -0.3, 1), yerr: 0.3, mark: "o", stroke: (dash: "dashed"), label: [Data]),
-    
+    lq.plot(
+      (1, 2, 3, 7, 9),
+      (-1, 1.8, 0.7, -0.3, 1),
+      yerr: 0.3,
+      mark: "o",
+      stroke: (dash: "dashed"),
+      label: [Data],
+    ),
+
     // adjust plot layout
     height: 3cm,
-    xlabel: [Angle ~ $x$ / rad], xlim: (0, 10),
-    ylabel: [$y$ / m], ylim: (-1.5, 2.5),
-    
+    xlabel: [Angle ~ $x$ / rad],
+    xlim: (0, 10),
+    ylabel: [$y$ / m],
+    ylim: (-1.5, 2.5),
   ),
   placement: auto, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
-  caption: [A plot create with the Lilaq package directly inside the typst source code]
+  caption: [A plot create with the Lilaq package directly inside the typst source code],
 ) <fig:lilaq>
 
 
@@ -258,6 +269,6 @@ Examples are given below @typst @jacowguide @jacow.org @example-journal-article 
   scope: "parent",
   float: true,
   clearance: 70pt, // TODO: increase clearance for manual column balancing
-  []
+  [],
 )
 
