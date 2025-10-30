@@ -3,7 +3,7 @@
 #show: jacow.with(
   //paper-size: "a4",
   show-grid: true,
-  
+
   // Paper title
   title: [
     Preparation of Papers for JAC#lower[o]W conferences
@@ -28,7 +28,7 @@
     Conferences Website (JACoW) collaboration for the
     publication of their proceedings. This document describes
     the common requirements for the submission of papers to
-    these conferences. Please consult individual conference 
+    these conferences. Please consult individual conference
     information for page limits, method of electronic submission,
     etc. It is not intended that this should be a tutorial in word
     processing; the aim is to explain the particular requirements
@@ -46,7 +46,7 @@
 // Other useful packages
 //#import "@preview/quick-maths:0.1.0"
 //#import "@preview/physica:0.9.3"
-#import "@preview/unify:0.6.0": unit,num,qty,numrange,qtyrange
+#import "@preview/unify:0.6.0": num, numrange, qty, qtyrange, unit
 
 
 
@@ -90,13 +90,14 @@ should flow from top to bottom in each column).
 
 
 #figure(
+  // @typstyle off
   jacow-table("lcc",
     [Margin], [A4 Paper],        [US Letter Paper],
     [Top],    [37 mm (1.46 in)], [0.75 in (19 mm)],
     [Bottom], [19 mm (0.75 in)], [0.75 in (19 mm)],
     [Left],   [20 mm (0.79 in)], [0.79 in (20 mm)],
     [Right],  [20 mm (0.79 in)], [1.02 in (26 mm)],
-  ),        
+  ),
   placement: top, // top, bottom or auto
   caption: [Margin Specifications],
 ) <table:margins>
