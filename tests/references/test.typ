@@ -8,7 +8,7 @@
  * Typst universe: https://typst.app/universe/package/accelerated-jacow
  * GitHub repository: https://github.com/eltos/accelerated-jacow
  */
- 
+
 #import "/jacow.typ": jacow
 
 
@@ -16,11 +16,13 @@
   title: [
     Reference style guide for JAC#lower[o]W papers
   ],
-  show-grid: true
+  show-grid: true,
 )
 
 == Referencing #box[JACoW] Proceedings
 
 Reference formatting in accordance with the JACoW Guide @jacowguide is used in the following examples.
+
+See also @ref1 @ref2. And @ref6 as well as @ref4 @ref3.
 
 #bibliography("test_references.bib", full: true)
