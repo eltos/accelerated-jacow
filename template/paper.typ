@@ -116,24 +116,12 @@ It takes the column alignment as first argument (here `lcrl` means left, center,
 The optional `header` argument allows to adjust the appearance of the JACoW table style as shown in @table:specs.
 
 #figure(
-  jacow-table(
-    "lcrl",
-    [No.],
-    [$x$ / mm],
-    [$y$],
-    [Note],
-    [1],
-    [0.32],
-    qty(70, "cm"),
-    [Small],
-    [2],
-    [2.5],
-    qty(3, "dm"),
-    [Medium],
-    [3],
-    [18],
-    qty(1.5, "m"),
-    [*Large*],
+  // @typstyle off
+  jacow-table("lcrl",
+    [No.], [$x$ / mm], [$y$], [Note],
+    [1],   [0.32],     qty(70, "cm"), [Small],
+    [2],   [2.5],      qty(3, "dm"),  [Medium],
+    [3],   [18],       qty(1.5, "m"), [*Large*],
   ),
   //placement: none, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
   caption: [Dimensions],
@@ -141,27 +129,13 @@ The optional `header` argument allows to adjust the appearance of the JACoW tabl
 
 
 #figure(
-  jacow-table(
-    "lccc",
-    header: top + left, // top, left or none
-    [],
-    [Gen A],
-    [Gen B],
-    [Gen C],
-    [Frequency],
-    table.cell(qty(1234567.89, "Hz"), colspan: 3, align: center),
-    [Voltage],
-    qty(1, "kV"),
-    qty(3, "kV"),
-    qty(3, "kV"),
-    [Cells],
-    [3],
-    [5],
-    [9],
-    [Quality],
-    [100],
-    [500],
-    num(1000),
+  // @typstyle off
+  jacow-table("lccc", header: top+left, // top, left or none
+    [],          [Gen A],      [Gen B],      [Gen C],
+    [Frequency], table.cell(qty(1234567.89, "Hz"), colspan: 3, align: center),
+    [Voltage],   qty(1, "kV"), qty(3, "kV"), qty(3, "kV"),
+    [Cells],     [3],          [5],          [9],
+    [Quality],   [100],        [500],        num(1000),
   ),
   //placement: none, // `top`, `bottom` or `auto` for floating placement or `none` for inline placement
   caption: [
