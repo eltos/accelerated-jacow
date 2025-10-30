@@ -552,9 +552,9 @@
   // equations
   set math.equation(numbering: "(1)")
   show math.equation: it => {
-    if it.block and not it.has("label") [
+    if it.block and not it.has("label") and it.numbering != none [
       #counter(math.equation).update(v => v - 1)
-      #math.equation(it.body, block: true, numbering: none)#label("_unnumbered")
+      #math.equation(it.body, block: true, numbering: none)
     ] else {
       it
     }
@@ -582,7 +582,6 @@
     set par(spacing: 9pt)
     show grid.cell.where(x: 0): set align(right)
 
-    //show link: it => it.body // no clickable links as per JACoW demand
     show regex("\b(https?://\S+|10(\.\d+)+/\S+)"): it => {
       let is-doi = it.text.starts-with("10")
       let it = if is-doi [doi:#it] else { it }
@@ -611,6 +610,12 @@
         if it.text.ends-with("/") [.]
       }
     }
+    // JACoW demands URLs not to be clickable, only DOIs
+    // This could be done with the following show rule, however we will not do so,
+    // becaue modern PDF readers will recognize the https:// and make it clickable anyways,
+    // but most of them will fail to do it properly when the link text spanns multiple lines.
+    // So this effectively just breaks the link for the user, not remove it. We can do better!
+    //show link: it => {if (it.body.text.match(regex("http.*")) == none) {it} else {it.body.text}}
     it
   }
 

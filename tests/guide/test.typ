@@ -97,7 +97,7 @@ should flow from top to bottom in each column).
     [Bottom], [19 mm (0.75 in)], [0.75 in (19 mm)],
     [Left],   [20 mm (0.79 in)], [0.79 in (20 mm)],
     [Right],  [20 mm (0.79 in)], [1.02 in (26 mm)],
-  ),
+  ),        
   placement: top, // top, bottom or auto
   caption: [Margin Specifications],
 ) <table:margins>
