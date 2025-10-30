@@ -90,25 +90,6 @@ should flow from top to bottom in each column).
 
 
 #figure(
-<<<<<<< HEAD
-  jacow-table(
-    "lcc",
-    [Margin],
-    [A4 Paper],
-    [US Letter Paper],
-    [Top],
-    [37 mm (1.46 in)],
-    [0.75 in (19 mm)],
-    [Bottom],
-    [19 mm (0.75 in)],
-    [0.75 in (19 mm)],
-    [Left],
-    [20 mm (0.79 in)],
-    [0.79 in (20 mm)],
-    [Right],
-    [20 mm (0.79 in)],
-    [1.02 in (26 mm)],
-=======
   // @typstyle off
   jacow-table("lcc",
     [Margin], [A4 Paper],        [US Letter Paper],
@@ -116,7 +97,6 @@ should flow from top to bottom in each column).
     [Bottom], [19 mm (0.75 in)], [0.75 in (19 mm)],
     [Left],   [20 mm (0.79 in)], [0.79 in (20 mm)],
     [Right],  [20 mm (0.79 in)], [1.02 in (26 mm)],
->>>>>>> main
   ),
   placement: top, // top, bottom or auto
   caption: [Margin Specifications],
