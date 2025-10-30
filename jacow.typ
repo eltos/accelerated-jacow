@@ -63,7 +63,6 @@
   /// -> content
   body,
 ) = {
-
   // Pubmatter support
   if pubmatter != none {
     if title == none {
@@ -87,7 +86,7 @@
 
   // sanitize author list
   if type(authors) == dictionary { authors = (authors,) } // single author case
-  let i = 0;
+  let i = 0
   while i < authors.len() {
     let a = authors.at(i)
     if "names" in a {
@@ -101,22 +100,24 @@
   authors = authors.map(a => {
     if "by" in a.keys() { a.insert("name", a.remove("by")) }
     if "at" in a.keys() { a.insert("affiliation", a.remove("at")) }
-    if type(a.affiliation) == str {  // ensure affiliation is an array
-      a.insert("affiliation", (a.remove("affiliation"),));
+    if type(a.affiliation) == str {
+      // ensure affiliation is an array
+      a.insert("affiliation", (a.remove("affiliation"),))
     }
-    if "name" in a.keys() {a.insert("name", a.name.trim(" "))}
+    if "name" in a.keys() { a.insert("name", a.name.trim(" ")) }
     a
   })
   authors = authors.filter(a => "name" in a.keys())
 
   // sort authors: corresponding first, then alphabetic by last name
-  authors = authors.sorted(key: a => if "email" in a {" "} + a.name.split(" ").last())
+  authors = authors.sorted(key: a => (
+    if "email" in a { " " } + a.name.split(" ").last()
+  ))
 
 
   /// Helper for custom footnote symbols
   let titlenotenumbering(i) = {
-    if i < 6 { ("*", "#", "§", "¶", "‡").at(i - 1)}
-    else { (i - 4)*"*" }
+    if i < 6 { ("*", "#", "§", "¶", "‡").at(i - 1) } else { (i - 4) * "*" }
   }
 
   /// Capitalize all characters in the text, e.g. "THIS IS AN ALLCAPS HEADING"
@@ -144,38 +145,44 @@
   }
 
 
-
-
-
   // metadata
 
   set document(title: title, author: authors.map(author => author.name))
 
 
   // layout
-  
+
   let paper = (
-    if lower(paper-size) == "a4" {(width: 21mm, height: 29.7mm)}
-    else if lower(paper-size) in ("us", "letter", "us-letter") {(width: 8.5in, height: 11in)}
-    else if lower(paper-size) in ("jacow", "test") {(width: 21cm, height: 11in)}
-    else {panic("Unsupported paper-size, use 'a4', 'us-letter' or 'jacow'!")}
+    if lower(paper-size) == "a4" {
+      (width: 21mm, height: 29.7mm)
+    } else if lower(paper-size) in ("us", "letter", "us-letter") {
+      (width: 8.5in, height: 11in)
+    } else if lower(paper-size) in ("jacow", "test") {
+      (width: 21cm, height: 11in)
+    } else {
+      panic("Unsupported paper-size, use 'a4', 'us-letter' or 'jacow'!")
+    }
   )
-  
-  // jacow margins slightly increased as per editor request 
+
+  // jacow margins slightly increased as per editor request
   let left-margin = 20mm
   let column-width = 82.5mm
   let column-gutter = 5mm
   let bottom-margin = 0.75in + 0.1in
   let column-height = 9.5in - 0.1in
-  
+
   set page(
     width: paper.width,
-    height: if lower(paper-size) == "test" {auto} else {paper.height},
+    height: if lower(paper-size) == "test" { auto } else { paper.height },
     margin: (
       left: left-margin,
-      right: paper.width - left-margin - 2*column-width - column-gutter + 0.4mm,
+      right: paper.width
+        - left-margin
+        - 2 * column-width
+        - column-gutter
+        + 0.4mm,
       top: paper.height - bottom-margin - column-height + 0.005in,
-      bottom: bottom-margin + 0.03in
+      bottom: bottom-margin + 0.03in,
     ),
     columns: 2,
   )
@@ -183,61 +190,83 @@
   set columns(gutter: column-gutter + 0.4mm)
 
 
-
   set text(
     font: "TeX Gyre Termes",
-    size: 10pt
+    size: 10pt,
   )
 
   set par(
     spacing: 0.65em,
     leading: 0.5em,
-    ..if sys.version >= version(0, 14) {(
-      justification-limits: (
-        spacing: (min: 70%, max: 130%),
-        tracking: (min: -0.01em, max: 0.02em),
+    ..if sys.version >= version(0, 14) {
+      (
+        justification-limits: (
+          spacing: (min: 70%, max: 130%),
+          tracking: (min: -0.01em, max: 0.02em),
+        ),
       )
-    )}
+    },
   )
 
-  
+
   // draft utilities
-  
+
   set page(
     header: grid(columns: (2fr, 3fr), align: (left, right))[
       // Page limit warning with note in header
       // until we have https://github.com/typst/typst/issues/1322
       #set text(fill: red, size: 13pt, weight: "bold")
-      #context if page-limit != none and query(<content-end>).at(0).location().page() > page-limit [
+      #context if (
+        page-limit != none
+          and query(<content-end>).at(0).location().page() > page-limit
+      ) [
         Limit of #page-limit pages exceeded
-      ]      
+      ]
     ][
       // Draft note
       #set text(fill: red)
       #draft-note
-    ],    
+    ],
     ..if show-grid {
-      (background: [
-        #let at = (x: 0pt, y: 0pt, c) => place(bottom + left, move(dx: x, dy: -y, c))
-        // grid
-        #context for i in range(-1, 28){
-          let style = (length: 100%, stroke: silver)
-          at(x: left-margin + i*1cm, line(angle: 90deg, ..style))
-          at(y: bottom-margin + i*0.5in, line(..style))
-          set text(fill: gray.darken(50%))
-          at(x: left-margin + i*1cm, y: bottom-margin - 0.5in, if i == 1 [1 cm] else if i >= 0 [#i])
-          at(x: left-margin - 1cm, y: bottom-margin + i*0.5in, if i == 1 [½ in] else if i >= 0 {str(i/2).replace(".5", "½")})
-        }
-        // page and column borders
-        #at(rect(width: 21cm, height: 29.7cm)) // DIN A4
-        #at(rect(width: 8.5in, height: 11in)) // US letter
-        #at(x: left-margin, y: bottom-margin, rect(width: column-width, height: column-height, stroke: green))
-        #at(x: left-margin + column-width + column-gutter, y: bottom-margin, rect(width: column-width, height: column-height, stroke: green))
-      ])
-    }
+      (
+        background: [
+          #let at = (x: 0pt, y: 0pt, c) => place(bottom + left, move(
+            dx: x,
+            dy: -y,
+            c,
+          ))
+          // grid
+          #context for i in range(-1, 28) {
+            let style = (length: 100%, stroke: silver)
+            at(x: left-margin + i * 1cm, line(angle: 90deg, ..style))
+            at(y: bottom-margin + i * 0.5in, line(..style))
+            set text(fill: gray.darken(50%))
+            at(x: left-margin + i * 1cm, y: bottom-margin - 0.5in, if i
+              == 1 [1 cm] else if i >= 0 [#i])
+            at(x: left-margin - 1cm, y: bottom-margin + i * 0.5in, if i
+              == 1 [½ in] else if i >= 0 { str(i / 2).replace(".5", "½") })
+          }
+          // page and column borders
+          #at(rect(width: 21cm, height: 29.7cm)) // DIN A4
+          #at(rect(width: 8.5in, height: 11in)) // US letter
+          #at(x: left-margin, y: bottom-margin, rect(
+            width: column-width,
+            height: column-height,
+            stroke: green,
+          ))
+          #at(
+            x: left-margin + column-width + column-gutter,
+            y: bottom-margin,
+            rect(width: column-width, height: column-height, stroke: green),
+          )
+        ],
+      )
+    },
   )
-  
-  set par.line(..if show-line-numbers {(numbering: it => text(fill: gray)[#it])})
+
+  set par.line(..if show-line-numbers {
+    (numbering: it => text(fill: gray)[#it])
+  })
 
 
   // Note: footnotes not working in parent scoped placement with two column mode.
@@ -250,11 +279,11 @@
   footnotes.update(footnotes => (:)) // For multiple papers in a single file
   let titlefootnote(text) = {
     footnotes.update(footnotes => {
-      footnotes.insert(titlenotenumbering(footnotes.len()+1), text)
+      footnotes.insert(titlenotenumbering(footnotes.len() + 1), text)
       footnotes
     })
     h(0pt, weak: true)
-    context{super(footnotes.get().keys().at(-1))}
+    context { super(footnotes.get().keys().at(-1)) }
   }
 
   show footnote.entry: set align(left)
@@ -264,9 +293,8 @@
     separator: [
       #set align(left)
       #line(length: 40%, stroke: 0.5pt)
-    ]
+    ],
   )
-
 
 
   place(
@@ -274,7 +302,6 @@
     scope: "parent",
     float: true,
     {
-
       set align(center)
       set par(justify: false)
       set text(hyphenate: false)
@@ -285,7 +312,7 @@
 
 
       v(0.75pt)
-      if (sys.version < version(0, 14)){
+      if (sys.version < version(0, 14)) {
         text(size: 14pt, weight: "bold", [
           #allcaps(title)
           #if funding != none { titlefootnote(funding) }
@@ -297,7 +324,7 @@
         std.title({
           allcaps(title)
           if funding != none { titlefootnote(funding) }
-        })  
+        })
       }
 
 
@@ -306,12 +333,16 @@
        */
 
       let keep-together(content) = {
-        if type(content) == str and "\n" in content { // allow manual linebreaks
+        if type(content) == str and "\n" in content {
+          // allow manual linebreaks
           show " ": sym.space.nobreak
           show "-": sym.hyph.nobreak
           content
         } else {
-          set box(fill: green.lighten(50%), stroke: green.lighten(50%)) if show-grid
+          set box(
+            fill: green.lighten(50%),
+            stroke: green.lighten(50%),
+          ) if show-grid
           box(content)
         }
       }
@@ -320,19 +351,24 @@
         keep-together({
           author.name
           if "email" in author { titlefootnote(author.email) }
-          if numbers != none { super(typographic: false, numbers.sorted().map(str).join(",")) }
+          if numbers != none {
+            super(typographic: false, numbers.sorted().map(str).join(","))
+          }
         })
       }
 
       let affiliation-entry(id, number: none, prefix: none) = {
         let a = affiliations.at(
           // allow passing prim. aff. directly, but only if it's a proper one
-          id, ..if "," in id {(default: id)}
+          id,
+          ..if "," in id { (default: id) },
         )
         if type(a) == str {
-          if number != none or prefix != none { // trim whitespaces
+          if number != none or prefix != none {
+            // trim whitespaces
             a = a.trim()
-          } else { // but allow newlines at start for manual linebreak control
+          } else {
+            // but allow newlines at start for manual linebreak control
             a = a.trim(" ").trim(at: end)
           }
         }
@@ -344,24 +380,30 @@
       }
 
       text(size: 12pt, {
-
         if group-by-affiliation {
-
           // Grouped by Affiliation
           // **********************
 
-          let primary-affiliations = authors.map(a => a.affiliation.first()).dedup()
+          let primary-affiliations = authors
+            .map(a => a.affiliation.first())
+            .dedup()
           let also-at = authors
-            .sorted(key: a => primary-affiliations.position(i => i == a.affiliation.first()))
-            .map(a => a.affiliation.slice(1)).flatten().dedup()
-          also-at = also-at.zip(range(1, 1+also-at.len())).to-dict()
+            .sorted(key: a => primary-affiliations.position(i => (
+              i == a.affiliation.first()
+            )))
+            .map(a => a.affiliation.slice(1))
+            .flatten()
+            .dedup()
+          also-at = also-at.zip(range(1, 1 + also-at.len())).to-dict()
 
           // author list with primary affiliation
           for aff in primary-affiliations {
-
             let author-content = authors
               .filter(a => a.affiliation.first() == aff)
-              .map(a => author-entry(a, numbers: a.affiliation.slice(1).map(i => also-at.at(i))))
+              .map(a => author-entry(
+                a,
+                numbers: a.affiliation.slice(1).map(i => also-at.at(i)),
+              ))
               .join(", ")
 
             let affiliation-content = affiliation-entry(aff)
@@ -369,13 +411,15 @@
             // print author and primary affiliation entries on same or separate lines
             layout(it => {
               let combined-entry = author-content + ", " + affiliation-content
-              if (measure(author-content, width: it.width).height == measure(combined-entry, width: it.width).height){
+              if (
+                measure(author-content, width: it.width).height
+                  == measure(combined-entry, width: it.width).height
+              ) {
                 combined-entry + "\n"
               } else {
                 author-content + affiliation-content + "\n" // No comma here!
               }
             })
-
           }
 
           // secondary affiliations
@@ -383,21 +427,20 @@
             affiliation-entry(a, number: i, prefix: "also at ")
             linebreak()
           }
-
-
         } else {
-
           // Grouped by Author
           // *****************
 
           let at = authors.map(a => a.affiliation).flatten().dedup()
-          at = at.zip(range(1, 1+at.len())).to-dict()
+          at = at.zip(range(1, 1 + at.len())).to-dict()
           if at.len() == 1 { at = (at.keys().first(): "") }
 
           // author list
-          authors.map(
-            a => author-entry(a, numbers: a.affiliation.map(i => at.at(i))),
-          ).join(", ")
+          authors
+            .map(
+              a => author-entry(a, numbers: a.affiliation.map(i => at.at(i))),
+            )
+            .join(", ")
           linebreak()
 
           // affiliations
@@ -405,27 +448,25 @@
             affiliation-entry(a, number: i)
             linebreak()
           }
-
         }
 
         if on-behalf-of != none {
           "on behalf of " + on-behalf-of
         }
-
       })
       v(1pt)
-
-
-    }
+    },
   )
 
 
-  context{
+  context {
     for (symbol, text) in footnotes.get() {
-      place(footnote(numbering: it => "", {super(symbol) + sym.space.med + text}))
+      place(footnote(
+        numbering: it => "",
+        { super(symbol) + sym.space.med + text },
+      ))
     }
   }
-
 
 
   /*
@@ -448,7 +489,7 @@
     block(
       below: 2pt,
       sticky: true,
-      allcaps(it.body)
+      allcaps(it.body),
     )
     h(1em)
   }
@@ -460,7 +501,7 @@
     block(
       below: 2pt,
       sticky: true,
-      wordcaps(it.body)
+      wordcaps(it.body),
     )
     h(1em)
   }
@@ -486,14 +527,18 @@
   show figure.caption: it => {
     set par(first-line-indent: 0em)
     layout(size => context {
-      align( // center for single-line, left for multi-line captions
+      align(
+        // center for single-line, left for multi-line captions
         if measure(it).width < size.width { center } else { left },
         if sys.version.at(1) >= 13 {
           // workaround for https://github.com/typst/typst/issues/5472#issuecomment-2730205275
-          block(width: size.width, context[#it.supplement #it.counter.display()#it.separator#it.body])
+          block(
+            width: size.width,
+            context [#it.supplement #it.counter.display()#it.separator#it.body],
+          )
         } else {
           block(width: size.width, it) // use full width and justify
-        }
+        },
       )
     })
   }
@@ -501,18 +546,18 @@
 
   // tables
   show figure.where(
-    kind: table
+    kind: table,
   ): set figure.caption(position: top)
 
   // equations
   set math.equation(numbering: "(1)")
   show math.equation: it => {
     if it.block and not it.has("label") and it.numbering != none [
-        #counter(math.equation).update(v => v - 1)
-        #math.equation(it.body, block: true, numbering: none)
+      #counter(math.equation).update(v => v - 1)
+      #math.equation(it.body, block: true, numbering: none)
     ] else {
       it
-    }  
+    }
   }
 
   // references
@@ -530,17 +575,22 @@
   set bibliography(title: none, style: "jacow.csl")
   show bibliography: it => {
     // marker to check for page limit
-    [#block(height: 0pt, above: 0pt, below: 0pt)<content-end>] 
-    
+    [#block(height: 0pt, above: 0pt, below: 0pt)<content-end>]
+
     heading(bibliography-title)
     set text(9pt)
     set par(spacing: 9pt)
     show grid.cell.where(x: 0): set align(right)
-    
+
     show regex("\b(https?://\S+|10(\.\d+)+/\S+)"): it => {
       let is-doi = it.text.starts-with("10")
-      let it = if is-doi [doi:#it] else {it}
-      let link = text(font: "DejaVu Sans Mono", size: 7.2pt, hyphenate: false, it)
+      let it = if is-doi [doi:#it] else { it }
+      let link = text(
+        font: "DejaVu Sans Mono",
+        size: 7.2pt,
+        hyphenate: false,
+        it,
+      )
 
       if is-doi {
         // Avoid breaking DOI: Put in same line if it fits, otherwise force into new line
@@ -559,7 +609,6 @@
         link
         if it.text.ends-with("/") [.]
       }
-      
     }
     // JACoW demands URLs not to be clickable, only DOIs
     // This could be done with the following show rule, however we will not do so,
@@ -580,8 +629,6 @@
 
   // content
   body
-
-
 }
 
 
@@ -599,16 +646,21 @@
     columns: spec.len(),
     align: spec.map(i => (a: auto, c: center, l: left, r: right).at(i)),
     stroke: (x, y) => {
-      if y == 0 {(top: 0.08em, bottom: if header.y == top {0.05em})}
-      else if y > 1 {(top: 0em, bottom: 0.08em)}
+      if y == 0 {
+        (top: 0.08em, bottom: if header.y == top { 0.05em })
+      } else if y > 1 { (top: 0em, bottom: 0.08em) }
     },
   )
   for (key, value) in contents.named() {
     args.insert(key, value)
   }
 
-  show table.cell.where(y: 0): it => if header.y == top {strong(it)} else {it}
-  show table.cell.where(x: 0): it => if header.x == left {strong(it)} else {it}
+  show table.cell.where(y: 0): it => if header.y == top { strong(it) } else {
+    it
+  }
+  show table.cell.where(x: 0): it => if header.x == left { strong(it) } else {
+    it
+  }
 
   table(
     ..args,
