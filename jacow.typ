@@ -530,7 +530,7 @@
       align(
         // center for single-line, left for multi-line captions
         if measure(it).width < size.width { center } else { left },
-        if sys.version.at(1) >= 13 {
+        if sys.version >= version(0, 13) {
           // workaround for https://github.com/typst/typst/issues/5472#issuecomment-2730205275
           block(
             width: size.width,
