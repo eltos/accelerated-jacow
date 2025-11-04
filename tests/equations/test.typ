@@ -18,3 +18,4 @@ $
 $ <eq:mycustomlabel>
 
 No label, labeled @eq:mycustomlabel, inline $a+b$.
+
