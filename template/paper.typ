@@ -9,7 +9,7 @@
  * GitHub repository: https://github.com/eltos/accelerated-jacow
  */
 
-#import "@preview/accelerated-jacow:0.14.0": jacow, jacow-table
+#import "@preview/accelerated-jacow:0.1.5": jacow, jacow-table
 
 #show: jacow.with(
   // Paper title
@@ -52,8 +52,8 @@
 // Other useful packages, see below for usage examples
 #import "@preview/unify:0.7.1": num, numrange, qty, qtyrange, unit
 #import "@preview/glossy:0.7.0": init-glossary
-#import "@preview/lilaq:0.1.0" as lq
-#import "@preview/physica:0.9.5": *
+#import "@preview/lilaq:0.5.0" as lq
+#import "@preview/physica:0.9.7": *
 
 
 
