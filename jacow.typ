@@ -133,7 +133,7 @@
       words += txt.matches(regex("()(\\w{4,})")) // words with 4+ letters
       for m in words {
         let (pre, word) = m.captures
-        word = upper(word.at(0)) + word.slice(1)
+        word = upper(word.codepoints().at(0)) + word.codepoints().slice(1).join("")
         txt = txt.slice(0, m.start) + pre + word + txt.slice(m.end)
       }
       txt
