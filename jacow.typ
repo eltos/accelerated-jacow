@@ -129,7 +129,7 @@
     if body.has("text") {
       let txt = body.text //lower(body.text)
       let words = ()
-      if (not is-segment){ words += txt.matches(regex("^()(\\w+)")) } // first word
+      if (not is-segment) { words += txt.matches(regex("^()(\\w+)")) } // first word
       words += txt.matches(regex("([.:;?!]\s+)(\\w+)")) // words after punctuation
       words += txt.matches(regex("()(\\w{4,})")) // words with 4+ letters
       for m in words {
