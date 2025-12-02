@@ -119,13 +119,15 @@
   let titlenotenumbering(i) = {
     if i < 6 { ("*", "#", "§", "¶", "‡").at(i - 1) } else { (i - 4) * "*" }
   }
-  
+
   /// Remove white space at begin and end
   let strip-white-space(content) = {
-    if (content.has("children")){
+    if (content.has("children")) {
       let clean = content.children
-      for i in (0, -1){
-        while (clean.len() > 0 and repr(clean.at(i).func()) in ("space", "parbreak")) {
+      for i in (0, -1) {
+        while (
+          clean.len() > 0 and repr(clean.at(i).func()) in ("space", "parbreak")
+        ) {
           _ = clean.remove(i)
         }
       }
@@ -137,7 +139,7 @@
 
   /// Check if content ends with string
   let ends-with(content, end) = {
-    if (content.has("children")){
+    if (content.has("children")) {
       return ends-with(content.children.filter(c => c.has("text")).last(), end)
     } else if (content.has("text")) {
       return content.text.clusters().at(-1).ends-with(end)
@@ -555,12 +557,12 @@
     set par(first-line-indent: 0em)
     layout(size => context {
       let body = strip-white-space(it.body) // removes trailing whitespace
-      if (it.kind == table){
+      if (it.kind == table) {
         // table captions take the form of a heading (word caps)
         body = wordcaps(body)
       } else {
         // figure captions must end with a period
-        if (not ends-with(body, ".")){ body += "."}
+        if (not ends-with(body, ".")) { body += "." }
       }
       let caption = [#it.supplement #it.counter.display()#it.separator#body]
       align(

@@ -17,9 +17,9 @@
 #figure(
   box(fill: silver, width: 100%, height: 1cm),
   caption: [
-    
+
     Medium caption with two lines, spanning the entire width and left aligned
-    
+
   ],
 )
 
@@ -39,7 +39,7 @@
   table(columns: (1fr, 1fr, 1fr))[M],
   caption: [
     Medium caption with two lines, spanning the entire width and left aligned
-  
+
   ],
 )
 
