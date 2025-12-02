@@ -11,12 +11,16 @@
 
 #figure(
   box(fill: silver, width: 100%, height: 1cm),
-  caption: [Short caption centered],
+  caption: "Short caption centered.",
 )
 
 #figure(
   box(fill: silver, width: 100%, height: 1cm),
-  caption: [Medium caption with two lines, spanning the entire width and left aligned],
+  caption: [
+    
+    Medium caption with two lines, spanning the entire width and left aligned
+    
+  ],
 )
 
 #figure(
@@ -33,7 +37,10 @@
 
 #figure(
   table(columns: (1fr, 1fr, 1fr))[M],
-  caption: [Medium caption with two lines, spanning the entire width and left aligned],
+  caption: [
+    Medium caption with two lines, spanning the entire width and left aligned
+  
+  ],
 )
 
 #figure(
@@ -45,7 +52,7 @@
   box(fill: silver, width: 100%, height: 1cm),
   scope: "parent",
   placement: bottom,
-  caption: [Short caption centered],
+  caption: [Short caption centered with $pi$],
 )
 
 #figure(

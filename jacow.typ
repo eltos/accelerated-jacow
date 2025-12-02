@@ -119,6 +119,32 @@
   let titlenotenumbering(i) = {
     if i < 6 { ("*", "#", "§", "¶", "‡").at(i - 1) } else { (i - 4) * "*" }
   }
+  
+  /// Remove white space at begin and end
+  let strip-white-space(content) = {
+    if (content.has("children")){
+      let clean = content.children
+      for i in (0, -1){
+        while (clean.len() > 0 and repr(clean.at(i).func()) in ("space", "parbreak")) {
+          _ = clean.remove(i)
+        }
+      }
+      clean.join()
+    } else {
+      content
+    }
+  }
+
+  /// Check if content ends with string
+  let ends-with(content, end) = {
+    if (content.has("children")){
+      return ends-with(content.children.filter(c => c.has("text")).last(), end)
+    } else if (content.has("text")) {
+      return content.text.clusters().at(-1).ends-with(end)
+    } else {
+      return false
+    }
+  }
 
   /// Capitalize all characters in the text, e.g. "THIS IS AN ALLCAPS HEADING"
   let allcaps = upper
@@ -528,18 +554,19 @@
   show figure.caption: it => {
     set par(first-line-indent: 0em)
     layout(size => context {
+      let body = strip-white-space(it.body) // removes trailing whitespace
+      if (it.kind == table){
+        // table captions take the form of a heading (word caps)
+        body = wordcaps(body)
+      } else {
+        // figure captions must end with a period
+        if (not ends-with(body, ".")){ body += "."}
+      }
+      let caption = [#it.supplement #it.counter.display()#it.separator#body]
       align(
         // center for single-line, left for multi-line captions
-        if measure(it).width < size.width { center } else { left },
-        if sys.version >= version(0, 13) {
-          // workaround for https://github.com/typst/typst/issues/5472#issuecomment-2730205275
-          block(
-            width: size.width,
-            context [#it.supplement #it.counter.display()#it.separator#it.body],
-          )
-        } else {
-          block(width: size.width, it) // use full width and justify
-        },
+        if measure(caption).width < size.width { center } else { left },
+        block(width: size.width, caption),
       )
     })
   }
