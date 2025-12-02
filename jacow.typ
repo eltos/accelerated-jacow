@@ -125,20 +125,21 @@
 
   /// Capitalize major words, e.g. "This is a Word-Caps Heading"
   /// Heuristic until we have https://github.com/typst/typst/issues/1707
-  let wordcaps(body) = {
+  let wordcaps(body, is-segment: false) = {
     if body.has("text") {
       let txt = body.text //lower(body.text)
-      let words = txt.matches(regex("^()(\\w+)")) // first word
+      let words = ()
+      if (not is-segment){ words += txt.matches(regex("^()(\\w+)")) } // first word
       words += txt.matches(regex("([.:;?!]\s+)(\\w+)")) // words after punctuation
       words += txt.matches(regex("()(\\w{4,})")) // words with 4+ letters
       for m in words {
         let (pre, word) = m.captures
-        word = upper(word.at(0)) + word.slice(1)
-        txt = txt.slice(0, m.start) + pre + word + txt.slice(m.end)
+        let (w, ord) = (word.clusters().at(0), word.clusters().slice(1).join())
+        txt = txt.slice(0, m.start) + pre + upper(w) + ord + txt.slice(m.end)
       }
       txt
     } else if body.has("children") {
-      body.children.map(it => wordcaps(it)).join()
+      body.children.map(it => wordcaps(it, is-segment: true)).join()
     } else {
       body
     }
