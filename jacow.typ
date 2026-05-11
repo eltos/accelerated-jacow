@@ -205,11 +205,7 @@
     height: if lower(paper-size) == "test" { auto } else { paper.height },
     margin: (
       left: left-margin,
-      right: paper.width
-        - left-margin
-        - 2 * column-width
-        - column-gutter
-        + 0.4mm,
+      right: paper.width - left-margin - 2 * column-width - column-gutter + 0.4mm,
       top: paper.height - bottom-margin - column-height + 0.005in,
       bottom: bottom-margin + 0.03in,
     ),
@@ -246,8 +242,7 @@
       // until we have https://github.com/typst/typst/issues/1322
       #set text(fill: red, size: 13pt, weight: "bold")
       #context if (
-        page-limit != none
-          and query(<content-end>).at(0).location().page() > page-limit
+        page-limit != none and query(<content-end>).at(0).location().page() > page-limit
       ) [
         Limit of #page-limit pages exceeded
       ]
@@ -270,10 +265,10 @@
             at(x: left-margin + i * 1cm, line(angle: 90deg, ..style))
             at(y: bottom-margin + i * 0.5in, line(..style))
             set text(fill: gray.darken(50%))
-            at(x: left-margin + i * 1cm, y: bottom-margin - 0.5in, if i
-              == 1 [1 cm] else if i >= 0 [#i])
-            at(x: left-margin - 1cm, y: bottom-margin + i * 0.5in, if i
-              == 1 [½ in] else if i >= 0 { str(i / 2).replace(".5", "½") })
+            at(x: left-margin + i * 1cm, y: bottom-margin - 0.5in, if i == 1 [1 cm] else if i >= 0 [#i])
+            at(x: left-margin - 1cm, y: bottom-margin + i * 0.5in, if i == 1 [½ in] else if i >= 0 {
+              str(i / 2).replace(".5", "½")
+            })
           }
           // page and column borders
           #at(rect(width: 21cm, height: 29.7cm)) // DIN A4
@@ -413,9 +408,7 @@
           // Grouped by Affiliation
           // **********************
 
-          let primary-affiliations = authors
-            .map(a => a.affiliation.first())
-            .dedup()
+          let primary-affiliations = authors.map(a => a.affiliation.first()).dedup()
           let also-at = authors
             .sorted(key: a => primary-affiliations.position(i => (
               i == a.affiliation.first()
@@ -441,8 +434,7 @@
             layout(it => {
               let combined-entry = author-content + ", " + affiliation-content
               if (
-                measure(author-content, width: it.width).height
-                  == measure(combined-entry, width: it.width).height
+                measure(author-content, width: it.width).height == measure(combined-entry, width: it.width).height
               ) {
                 combined-entry + "\n"
               } else {
