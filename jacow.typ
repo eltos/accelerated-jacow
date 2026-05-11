@@ -183,7 +183,7 @@
 
   let paper = (
     if lower(paper-size) == "a4" {
-      (width: 21mm, height: 29.7mm)
+      (width: 21cm, height: 29.7cm)
     } else if lower(paper-size) in ("us", "letter", "us-letter") {
       (width: 8.5in, height: 11in)
     } else if lower(paper-size) in ("jacow", "test") {
