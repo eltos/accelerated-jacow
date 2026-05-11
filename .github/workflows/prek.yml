@@ -2,6 +2,8 @@ name: Prek autofix
 
 on:
   pull_request:
+    branches-ignore:
+      - '**-prek-auto-fixes'
   push:
     branches: [main]
 
@@ -15,7 +17,9 @@ env:
 
 jobs:
   prek:
-    if: github.actor != 'github-actions[bot]'
+    if: |
+      github.actor != 'github-actions[bot]' &&
+      !endsWith(github.ref_name, '-prek-auto-fixes')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
