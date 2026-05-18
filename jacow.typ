@@ -104,9 +104,9 @@
       // ensure affiliation is an array
       a.insert("affiliation", (a.remove("affiliation"),))
     }
-    if "name" in a.keys() { 
+    if "name" in a.keys() {
       if a.name.starts-with("\n") { a.insert("prebreak", true) }
-      a.insert("name", a.name.trim()) 
+      a.insert("name", a.name.trim())
     }
     a
   })
@@ -375,7 +375,7 @@
       }
 
       let author-entry(author, numbers: none) = {
-        if author.at("prebreak", default: false) {linebreak()}
+        if author.at("prebreak", default: false) { linebreak() }
         keep-together({
           author.name
           if "email" in author { titlefootnote(author.email) }
