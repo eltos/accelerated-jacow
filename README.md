@@ -47,7 +47,7 @@ It expects the following parameters:
 - `title` (content): The paper title
 - `authors` (list): The list of authors.
   Each author is specified as a dict with the following keys:
-  - `name` (str) or `names` (list of str): The name of the author, or a list of author names with the same affiliations(s)
+  - `name` (str) or `names` (list of str): The name of the author, or a list of author names with the same affiliations(s). It is possible to insert a newline "\n" characters at the beginning of the name to manually adjust the layout if required.
   - `at` (str or list): The affiliation of the author(s), or a list of affiliations with the first one being the primary affiliation.
     The affiliation is specified as string corresponding to a key in the affiliations dictionary (see below).
     Primary affiliations may alternatively be specified directly in their full form ("Affiliation, City, Country").
