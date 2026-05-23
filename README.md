@@ -25,7 +25,7 @@ typst watch paper.typ
 
 If you don't yet have the *TeX Gyre Termes* font family, you can install it with `sudo apt install tex-gyre`.
 
-![Thumbnail](thumbnail.webp)
+![Template preview with title, authorlist, and example content](thumbnail.webp)
 
 ### API documentation
 
