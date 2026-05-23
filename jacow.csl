@@ -302,6 +302,7 @@
             <text macro="title"/>
             <text macro="container-title"/>
             <text variable="event-place"/>
+            <text macro="issued"/>
             <text macro="locators"/>
             <text macro="page"/>
           </group>
