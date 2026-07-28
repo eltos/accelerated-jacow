@@ -9,7 +9,7 @@
  * GitHub repository: https://github.com/eltos/accelerated-jacow
  */
 
-#import "@preview/accelerated-jacow:0.14.1": jacow, jacow-table
+#import "@preview/accelerated-jacow:0.15.0": jacow, jacow-table
 
 #show: jacow.with(
   // Paper title
