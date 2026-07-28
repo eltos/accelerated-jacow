@@ -51,7 +51,7 @@
 
 // Other useful packages, see below for usage examples
 #import "@preview/unify:0.8.1": num, numrange, qty, qtyrange, unit
-#import "@preview/glossy:0.7.0": init-glossary
+#import "@preview/glossy:0.9.2": init-glossary
 #import "@preview/lilaq:0.6.0" as lq
 #import "@preview/physica:0.9.8": *
 

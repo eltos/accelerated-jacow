@@ -590,10 +590,12 @@
   set ref(supplement: it => {
     if it.func() == figure and it.kind == image {
       "Fig."
+    } else if it.func() == figure and it.kind == table {
+      "Table"
     } else if it.func() == math.equation {
       "Eq."
-    } else {
-      it.supplement
+    } else if it.func() == heading {
+      "Sec."
     }
   })
 
