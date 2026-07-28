@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        typst-version: [ '0.14.2' ]
+        typst-version: [ '0.15.1' ]
     steps:
       - uses: typst-community/setup-typst@v5.1
         with:
@@ -61,7 +61,7 @@ jobs:
       - name: Install tytanic
         uses: taiki-e/cache-cargo-install-action@v3.0.6
         with:
-          tool: tytanic@0.3.3
+          tool: tytanic@0.4.1
       - name: Install font
         run: |
           sudo apt install tex-gyre

@@ -1,5 +1,5 @@
 #import "/jacow.typ": *
-#import "@preview/pubmatter:0.2.1"
+#import "@preview/pubmatter:0.2.2"
 
 #show: jacow.with(
   paper-size: "test",
