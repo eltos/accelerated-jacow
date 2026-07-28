@@ -621,7 +621,7 @@
       )
 
       if is-doi {
-        set text(fill: cmyk(73%, 37%, 0%, 22%))
+        set text(fill: rgb("#3472a7"))
         // Avoid breaking DOI: Put in same line if it fits, otherwise force into new line
         let link-on-new-line = state("link-on-new-line", false)
         box(width: 1fr, layout(it => {
